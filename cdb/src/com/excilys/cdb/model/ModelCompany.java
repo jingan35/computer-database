@@ -13,5 +13,15 @@ public class ModelCompany {
 		this.id=id;
 		this.name=name;
 	}
+
+	public void setId(int newId) {
+		// TODO Auto-generated method stub
+		id=newId;
+	}
+	
+	public void setName(String newName) {
+		// TODO Auto-generated method stub
+		name=newName;
+	}
 	
 }

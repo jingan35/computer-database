@@ -3,11 +3,12 @@ package com.excilys.cdb.model;
 import java.sql.*;
 
 public class ModelComputer {
-	int id;
-	String name;
-	Timestamp introduced;
-	Timestamp discontinued;
-	int company_id;
+	private int id;
+	private String name;
+	private Timestamp introduced;
+	private Timestamp discontinued;
+	private int company_id;
+	private String company_name;
 	
 	public ModelComputer(){
 		id=-1;
@@ -48,5 +49,30 @@ public class ModelComputer {
 	public int getCompanyId() {
 		// TODO Auto-generated method stub
 		return company_id;
+	}
+	
+	public void setId(int newId) {
+		// TODO Auto-generated method stub
+		id=newId;
+	}
+
+	public void setName(String newName) {
+		// TODO Auto-generated method stub
+		newName=name;
+	}
+
+	public void setIntroduced(Timestamp T) {
+		// TODO Auto-generated method stub
+		introduced=T;
+	}
+
+	public void setDiscontinued(Timestamp T) {
+		// TODO Auto-generated method stub
+		discontinued=T;
+	}
+
+	public void setCompanyId(int newCompanyId) {
+		// TODO Auto-generated method stub
+		company_id=newCompanyId;
 	}
 }

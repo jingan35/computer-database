@@ -17,10 +17,9 @@ public class DaoCompany extends Dao<ModelCompany>{
 	public ArrayList<ModelCompany> select() {
 		// TODO Auto-generated method stub
 		ArrayList<ModelCompany> companyList = new ArrayList<ModelCompany>();
-		Connection connexion=null;
 		ResultSet resultat =null;
-		try {
-		    connexion = DriverManager.getConnection( url, utilisateur, motDePasse );
+		try (Connection connexion = DriverManager.getConnection( url, utilisateur, motDePasse );){
+		    
 		    Statement statement=connexion.createStatement();
 		    /* requête BDD */
 		    resultat = statement.executeQuery( "SELECT * FROM company;" );
@@ -40,16 +39,7 @@ public class DaoCompany extends Dao<ModelCompany>{
 		    /* Gérer les éventuelles erreurs ici */
 			
 			e.printStackTrace();
-		} finally {
-		    if ( connexion != null )
-		        try {
-		            /* Fermeture de la connexion */
-		            connexion.close();
-		        } catch ( SQLException ignore ) {
-		        	ignore.printStackTrace();
-		            /* Si une erreur survient lors de la fermeture, il suffit de l'ignorer. */
-		        }
-		}
+		} 
 		/* Exécution d'une requête de lecture */
 		
 		
