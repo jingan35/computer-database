@@ -31,6 +31,12 @@ public class DtoCompany {
 
 	public void setName(String newName) {
 		// TODO Auto-generated method stub
-		newName=name;
+		name=newName;
+	}
+	
+	public String toString() {
+		String s="";
+		s=s+"id : "+id+" name : "+name ; //+"introduced : \"+introduced+\"discontinued : \"+discontinued+\" company_id : \"+company_id
+		return s;
 	}
 }

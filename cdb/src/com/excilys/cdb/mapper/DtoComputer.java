@@ -8,6 +8,7 @@ public class DtoComputer {
 	private String introduced;
 	private String discontinued;
 	private String company_id;
+	private String companyName= null;
 	
 	public DtoComputer(){
 		id="-1";
@@ -34,6 +35,11 @@ public class DtoComputer {
 		// TODO Auto-generated method stub
 		return name;
 	}
+	
+	public String getCompanyName() {
+		// TODO Auto-generated method stub
+		return companyName;
+	}
 
 	public String getIntroduced() {
 		// TODO Auto-generated method stub
@@ -57,7 +63,12 @@ public class DtoComputer {
 
 	public void setName(String newName) {
 		// TODO Auto-generated method stub
-		newName=name;
+		name=newName;
+	}
+	
+	public void setCompanyName(String newName) {
+		// TODO Auto-generated method stub
+		companyName=newName;
 	}
 
 	public void setIntroduced(String T) {
@@ -73,6 +84,12 @@ public class DtoComputer {
 	public void setCompanyId(String newCompanyId) {
 		// TODO Auto-generated method stub
 		company_id=newCompanyId;
+	}
+	
+	public String toString() {
+		String s="";
+		s=s+"id="+id+" name: "+name+ " introduced Time:"+introduced+ " discontinued Time:"+ discontinued+ " company_name= "+companyName;
+		return s;
 	}
 
 }

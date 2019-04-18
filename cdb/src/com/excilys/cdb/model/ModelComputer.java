@@ -8,7 +8,7 @@ public class ModelComputer {
 	private Timestamp introduced;
 	private Timestamp discontinued;
 	private int company_id;
-	private String company_name;
+	private String companyName=null;
 	
 	public ModelComputer(){
 		id=-1;
@@ -24,6 +24,7 @@ public class ModelComputer {
 		this.introduced=introduced;
 		this.discontinued=discontinued;
 		this.company_id=company_id;
+		
 	}
 
 	public int getId() {
@@ -36,6 +37,11 @@ public class ModelComputer {
 		return name;
 	}
 
+	public String getCompanyName() {
+		// TODO Auto-generated method stub
+		return companyName;
+	}
+	
 	public Timestamp getIntroduced() {
 		// TODO Auto-generated method stub
 		return introduced;
@@ -58,7 +64,12 @@ public class ModelComputer {
 
 	public void setName(String newName) {
 		// TODO Auto-generated method stub
-		newName=name;
+		name=newName;
+	}
+	
+	public void setCompanyName(String newName) {
+		// TODO Auto-generated method stub
+		companyName=newName;
 	}
 
 	public void setIntroduced(Timestamp T) {

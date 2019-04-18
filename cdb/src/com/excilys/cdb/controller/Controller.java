@@ -1,5 +1,9 @@
 package com.excilys.cdb.controller;
 
+import java.util.ArrayList;
+
+import com.excilys.cdb.mapper.DtoCompany;
+import com.excilys.cdb.mapper.DtoComputer;
 import com.excilys.cdb.service.ServiceCompany;
 import com.excilys.cdb.service.ServiceComputer;
 
@@ -24,9 +28,11 @@ public class Controller {
     	if(cmdTab.length==1) {
     		if(cmdTab[0].equalsIgnoreCase("cl")) {
     			// Demander la List des computers
+    			computerList();
     		}
     		else if(cmdTab[0].equalsIgnoreCase("lc")) {
     			//liste des compagnies
+    			companyList();
     		}
     		else {
     			System.out.println("commande invalide ou mauvaise syntaxe");
@@ -39,6 +45,7 @@ public class Controller {
     			int id=-1;
     			try {
     				id=Integer.parseInt(cmdTab[1]);
+    				computerDetails(id);
     			}catch( NumberFormatException e) {
     				System.out.println("L'id doit être un entier");
     			}
@@ -78,5 +85,38 @@ public class Controller {
     		}
     	}
     }
-
+    
+    String computerList() {
+    	ArrayList<DtoComputer> computerList=sComputer.selectComputer();
+    	String result="";
+    	for(int i=0;i<computerList.size();i++) {
+    		result+="id : "+computerList.get(i).getId()+" name : "+computerList.get(i).getName() +"\n";
+    	}
+    	System.out.println(result);
+    	return result;
+    }
+    
+    String companyList() {
+    	ArrayList<DtoCompany> companyList=sCompany.selectCompany();
+    	String result="";
+    	for(int i=0;i<companyList.size();i++) {
+    		result+=companyList.get(i).toString()+"\n";
+    	}
+    	System.out.println(result);
+    	return result;
+    }
+    
+    String computerDetails(int id) {
+    	String result="";
+    	DtoComputer dC= sComputer.computerDetails(id); 
+    	result+=dC.toString()+"\n";
+    	System.out.println("toString : "+result);
+    	return result;
+    }
+    
+    String insertComputer(DtoComputer dC) {
+    	String result="";
+    	
+    	return result;
+    }
 }

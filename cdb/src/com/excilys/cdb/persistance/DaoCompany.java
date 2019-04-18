@@ -18,7 +18,7 @@ public class DaoCompany extends Dao<ModelCompany>{
 		// TODO Auto-generated method stub
 		ArrayList<ModelCompany> companyList = new ArrayList<ModelCompany>();
 		ResultSet resultat =null;
-		try (Connection connexion = DriverManager.getConnection( url, utilisateur, motDePasse );){
+		try (Connection connexion = DriverManager.getConnection( url, utilisateur, motDePasse )){
 		    
 		    Statement statement=connexion.createStatement();
 		    /* requête BDD */
@@ -28,9 +28,6 @@ public class DaoCompany extends Dao<ModelCompany>{
 			while ( resultat.next() ) {
 			    int id = resultat.getInt( "id" );
 			    String name = resultat.getString( "name" );
-			  //Test_affichage
-			    System.out.println("id="+id+" name: "+name);
-			    
 			    //creer le modelComputer et ajout dans la liste
 			    companyList.add( new ModelCompany(id,name));
 			}

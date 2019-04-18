@@ -25,9 +25,11 @@ public class ServiceComputer {
   		DtoComputer dC= new DtoComputer();
   		dC.setId(String.valueOf(mC.getId()));
   		dC.setName(mC.getName());
-  		dC.setIntroduced(mC.getIntroduced().toString());
-  		dC.setDiscontinued(mC.getDiscontinued().toString());
+  		dC.setIntroduced(String.valueOf(mC.getIntroduced()));
+  		dC.setDiscontinued(String.valueOf(mC.getDiscontinued()));
   		dC.setCompanyId(String.valueOf(mC.getCompanyId()));
+  		if(mC.getCompanyName()!=null)
+  			dC.setCompanyName(mC.getCompanyName());;
   		return dC;
   		
   	}
@@ -56,5 +58,14 @@ public class ServiceComputer {
   		
   	}
 	
+  	public DtoComputer computerDetails(int id) {
+  		DaoComputer dc = new DaoComputer();
+  		ModelComputer mc = dc.selectOne(id);
+  		
+  		DtoComputer result=modelComputerToDtoComputer(mc);
+  		return result;
+  	}
+  	
+  	
 	
 }

@@ -1,9 +1,11 @@
 package com.excilys.cdb.service;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 
 import com.excilys.cdb.mapper.DtoCompany;
 import com.excilys.cdb.mapper.DtoCompany;
 import com.excilys.cdb.model.*;
+import com.excilys.cdb.persistance.DaoCompany;
 
 public class ServiceCompany {
 	private ServiceCompany()
@@ -18,7 +20,7 @@ public class ServiceCompany {
     }
 	
 	//transforme modelCompany en dtoCompany
-			public DtoCompany modelCompanyToDtoCompany(ModelComputer mC){
+			public DtoCompany modelCompanyToDtoCompany(ModelCompany mC){
 				DtoCompany dC= new DtoCompany();
 				dC.setId(String.valueOf(mC.getId()));
 		  		dC.setName(mC.getName());
@@ -32,6 +34,18 @@ public class ServiceCompany {
 				mC.setId(Integer.parseInt((dC.getId())));
 		  		mC.setName(dC.getName());
 		  		return mC;
+				
+			}
+			
+			public ArrayList<DtoCompany> selectCompany(){
+				DaoCompany dC = new DaoCompany();
+		  		//le liste renvoyée
+		  		ArrayList<DtoCompany> resultList = new ArrayList<DtoCompany>();
+		  		ArrayList<ModelCompany> list= dC.select();
+		  		for(int i=0;i<list.size();i++) {
+		  			resultList.add(modelCompanyToDtoCompany(list.get(i)));
+		  		}
+				return resultList;
 				
 			}
 	

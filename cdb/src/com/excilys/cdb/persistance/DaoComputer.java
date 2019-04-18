@@ -28,9 +28,7 @@ public class DaoComputer extends Dao<ModelComputer>{
 			    int cId = resultat.getInt( "company_id" );
 			    Timestamp introduced = resultat.getTimestamp( "introduced" );
 			    Timestamp discontinued = resultat.getTimestamp( "discontinued" );
-			  //Test_affichage
-			    System.out.println("id="+id+" name: "+name);
-			    
+			  			    
 			    //creer le modelComputer et ajout dans la liste
 			    computerList.add( new ModelComputer(id,name,introduced,discontinued,cId));
 			}
@@ -90,21 +88,26 @@ public class DaoComputer extends Dao<ModelComputer>{
 		    
 		    Statement statement=connexion.createStatement();
 		    /* requête BDD */
-		    resultat = statement.executeQuery( "SELECT * FROM computer WHERE id="+id+";" );
+		    resultat = statement.executeQuery( "SELECT computer.id,computer.name,introduced,discontinued,company.name AS company_name,company.id FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.id="+id+";" );
 			/* Récupération des données du résultat de la requête de lecture */
-			while ( resultat.next() ) {
-			    int Id = resultat.getInt( "id" );
-			    String name = resultat.getString( "name" );
-			    int cId = resultat.getInt( "company_id" );
-			    Timestamp introduced = resultat.getTimestamp( "introduced" );
-			    Timestamp discontinued = resultat.getTimestamp( "discontinued" );
-			  //Test_affichage
-			    System.out.println("id="+Id+" name: "+name+ " introduced Time:"+introduced+ " discontinued Time:"+ discontinued+ " company_id= "+cId);
-
-			    
-			    //creer le modelComputer
-			    mC = new ModelComputer(id,name,introduced,discontinued,cId);
+			if(resultat.next()) {
+				int Id = resultat.getInt( "computer.id" );
+				String name = resultat.getString( "computer.name" );
+				int cId = resultat.getInt( "company.id" );
+				Timestamp introduced = resultat.getTimestamp( "introduced" );
+				Timestamp discontinued = resultat.getTimestamp( "discontinued" );
+				String companyName = resultat.getString( "company_name" );
+				    
+				    //creer le modelComputer
+				    mC = new ModelComputer(Id,name,introduced,discontinued,cId);
+				    if(companyName!=null) {
+				    	mC.setCompanyName(companyName);
+				    }
 			}
+			else {
+				System.out.println("Pas de resultat");
+			}
+			
 
 		} catch ( SQLException e ) {
 		    /* Gérer les éventuelles erreurs ici */
