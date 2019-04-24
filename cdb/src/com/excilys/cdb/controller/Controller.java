@@ -2,6 +2,7 @@ package com.excilys.cdb.controller;
 
 import java.util.ArrayList;
 
+import com.excilys.cdb.exception.*;
 import com.excilys.cdb.mapper.DtoCompany;
 import com.excilys.cdb.mapper.DtoComputer;
 import com.excilys.cdb.service.ServiceCompany;
@@ -23,7 +24,7 @@ public class Controller {
     }
     
     //identifie les commandes et appelle des bonnes fonctions 
-    public void requete(String cmd) {
+    public void requete(String cmd) throws NotIntExpectedException, NotACommandException, AllAttributesNeededException, PasLeBonFormatTimestamp, NotAIntegerException {
     	String[] cmdTab= cmd.split(";");
     	if(cmdTab.length==1) {
     		if(cmdTab[0].equalsIgnoreCase("cl")) {
@@ -35,7 +36,7 @@ public class Controller {
     			companyList();
     		}
     		else {
-    			System.out.println("commande invalide ou mauvaise syntaxe");
+    			throw new NotACommandException();
     		}
     	}
     	else {
@@ -47,7 +48,7 @@ public class Controller {
     				id=Integer.parseInt(cmdTab[1]);
     				computerDetails(id);
     			}catch( NumberFormatException e) {
-    				System.out.println("L'id doit être un entier");
+    				throw new NotIntExpectedException();
     			}
     			//fonction pour details de computer
     		}
@@ -56,7 +57,7 @@ public class Controller {
     			try {
     				id=Integer.parseInt(cmdTab[1]);
     			}catch( NumberFormatException e) {
-    				System.out.println("L'id doit être un entier");
+    				throw new NotIntExpectedException();
     			}
     			//fonction pour sppr
     		}
@@ -64,10 +65,23 @@ public class Controller {
     		else if(cmdTab[0].equalsIgnoreCase("ac")) {
     			//si tous les attributs du nouvel ordinateur données
     			if(cmdTab.length==6) {
-    				//fonction pour l'ajout d'un computer 
+    				//fonction pour l'ajout d'un computer
+    				DtoComputer dtoToAdd = new DtoComputer(cmdTab[1],cmdTab[2],"null","null","null");
+    				if(!cmdTab[3].equals("n")) {
+    					dtoToAdd.setIntroduced(cmdTab[3]);
+    				}
+    				if(!cmdTab[4].equals("n")) {
+    					dtoToAdd.setDiscontinued(cmdTab[4]);
+    				}
+    				if(!cmdTab[5].equals("n")) {
+    					dtoToAdd.setCompanyId(cmdTab[5]);
+    				}
+    				
+    				insertComputer(dtoToAdd);
+    				
     			}
     			else {
-    				System.out.println("pas mis tous les attributs du nouvel ordinateur");
+    				throw new AllAttributesNeededException();
     			}
     		}
     		
@@ -76,12 +90,12 @@ public class Controller {
     			try {
     				id=Integer.parseInt(cmdTab[1]);
     			}catch( NumberFormatException e) {
-    				System.out.println("L'id doit être un entier");
+    				throw new NotIntExpectedException();
     			}
     			//fonction pour update d'un computer
     		}
     		else {
-    			System.out.println("commande innexistante ou mauvaise syntaxe");
+    			throw new NotACommandException();
     		}
     	}
     }
@@ -114,9 +128,8 @@ public class Controller {
     	return result;
     }
     
-    String insertComputer(DtoComputer dC) {
-    	String result="";
+    void insertComputer(DtoComputer dC) throws PasLeBonFormatTimestamp, NotAIntegerException {
+    	sComputer.insertComputer(dC);
     	
-    	return result;
     }
 }

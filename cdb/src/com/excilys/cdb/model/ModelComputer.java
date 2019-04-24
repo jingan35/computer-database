@@ -7,7 +7,7 @@ public class ModelComputer {
 	private String name;
 	private Timestamp introduced;
 	private Timestamp discontinued;
-	private int company_id;
+	private Integer company_id;
 	private String companyName=null;
 	
 	public ModelComputer(){
@@ -52,7 +52,7 @@ public class ModelComputer {
 		return discontinued;
 	}
 
-	public int getCompanyId() {
+	public Integer getCompanyId() {
 		// TODO Auto-generated method stub
 		return company_id;
 	}
@@ -82,7 +82,7 @@ public class ModelComputer {
 		discontinued=T;
 	}
 
-	public void setCompanyId(int newCompanyId) {
+	public void setCompanyId(Integer newCompanyId) {
 		// TODO Auto-generated method stub
 		company_id=newCompanyId;
 	}

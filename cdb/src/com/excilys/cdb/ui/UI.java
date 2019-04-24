@@ -1,8 +1,8 @@
 package com.excilys.cdb.ui;
 
 import java.util.Scanner;
-
 import com.excilys.cdb.controller.Controller;
+import com.excilys.cdb.exception.*;
 import com.excilys.cdb.service.ServiceCompany;
 
 public class UI {
@@ -20,7 +20,7 @@ public class UI {
     {   return INSTANCE;
     }
     
-    public void start(){
+    public void start() {
     	boolean stop=false;
     	while (!stop) {
     		System.out.println("Help "
@@ -32,7 +32,23 @@ public class UI {
     				+ "\nAdd a computer: ac; id; name; introducedTimestamp('n' if null); discontinuedTimestamp('n' if null); company_id "); 
     		System.out.println("Quel est vôtre requête ? ");
     		Scanner sc = new Scanner(System.in);
-    		c.requete(sc.nextLine());
+    		try {
+    			c.requete(sc.nextLine());
+    		}catch(NotIntExpectedException nIEE){
+    			System.out.println(nIEE.getMessage());
+    		}
+    		catch(NotACommandException nACE){
+    			System.out.println(nACE.getMessage());
+    		}
+    		catch(AllAttributesNeededException aANE) {
+    			System.out.println(aANE.getMessage());
+    		}
+    		catch(PasLeBonFormatTimestamp pLBFTs) {
+    			System.out.println(pLBFTs.getMessage());
+    		}
+    		catch(NotAIntegerException nAIE) {
+    			System.out.println(nAIE.getMessage());
+    		}
     	}
     }
 

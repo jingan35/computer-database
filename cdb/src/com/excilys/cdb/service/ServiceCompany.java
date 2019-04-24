@@ -19,23 +19,6 @@ public class ServiceCompany {
     {   return INSTANCE;
     }
 	
-	//transforme modelCompany en dtoCompany
-			public DtoCompany modelCompanyToDtoCompany(ModelCompany mC){
-				DtoCompany dC= new DtoCompany();
-				dC.setId(String.valueOf(mC.getId()));
-		  		dC.setName(mC.getName());
-		  		return dC;
-				
-			}
-			
-			//transforme dtoCompany en  modelCompany
-			public ModelCompany dtoCompanyToModelCompany(DtoCompany dC){
-				ModelCompany mC= new ModelCompany();
-				mC.setId(Integer.parseInt((dC.getId())));
-		  		mC.setName(dC.getName());
-		  		return mC;
-				
-			}
 			
 			public ArrayList<DtoCompany> selectCompany(){
 				DaoCompany dC = new DaoCompany();
@@ -43,7 +26,7 @@ public class ServiceCompany {
 		  		ArrayList<DtoCompany> resultList = new ArrayList<DtoCompany>();
 		  		ArrayList<ModelCompany> list= dC.select();
 		  		for(int i=0;i<list.size();i++) {
-		  			resultList.add(modelCompanyToDtoCompany(list.get(i)));
+		  			resultList.add(MapperCompany.modelCompanyToDtoCompany(list.get(i)));
 		  		}
 				return resultList;
 				
