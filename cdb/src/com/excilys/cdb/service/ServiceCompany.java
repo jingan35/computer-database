@@ -10,7 +10,7 @@ import com.excilys.cdb.persistance.DaoCompany;
 public class ServiceCompany {
 	private ServiceCompany()
     {}
-	DaoCompany dC = new DaoCompany();
+	DaoCompany dC = DaoCompany.getInstance();
     /** Instance unique pré-initialisée */
     private static ServiceCompany INSTANCE = new ServiceCompany();
      

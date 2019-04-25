@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.excilys.cdb.exception.NotAIntegerException;
 import com.excilys.cdb.exception.PasLeBonFormatTimestamp;
+import com.excilys.cdb.exception.RequeteSansResultatException;
 import com.excilys.cdb.mapper.DtoComputer;
 import com.excilys.cdb.mapper.DtoComputer;
 import com.excilys.cdb.model.*;
@@ -14,7 +15,7 @@ public class ServiceComputer {
 	private ServiceComputer()
     {}
  
-	DaoComputer daoComputer = new DaoComputer();
+	DaoComputer daoComputer = DaoComputer.getInstance();
     /** Instance unique pré-initialisée */
     private static ServiceComputer INSTANCE = new ServiceComputer();
      
@@ -37,7 +38,7 @@ public class ServiceComputer {
   		
   	}
 	
-  	public DtoComputer computerDetails(int id) {
+  	public DtoComputer computerDetails(int id) throws RequeteSansResultatException {
   		
   		ModelComputer mc = daoComputer.selectOne(id);
   		
@@ -55,6 +56,10 @@ public class ServiceComputer {
   	public void updateComputer(DtoComputer dtoComputer) throws PasLeBonFormatTimestamp, NotAIntegerException {
   		ModelComputer computerToUpdate = MapperComputer.dtoComputerToModelComputer( dtoComputer);
   		daoComputer.update(computerToUpdate.getId(), computerToUpdate);
+  	}
+  	
+  	public void deleteComputer(int id) {
+  		daoComputer.delete(id);
   	}
   	
   	

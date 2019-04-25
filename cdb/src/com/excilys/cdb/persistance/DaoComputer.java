@@ -2,15 +2,21 @@ package com.excilys.cdb.persistance;
 import java.sql.*;
 import java.util.ArrayList;
 
+import com.excilys.cdb.exception.RequeteSansResultatException;
 import com.excilys.cdb.model.*;
 
 
 public class DaoComputer extends Dao<ModelComputer>{
 
 	
-	public DaoComputer(){
+	private DaoComputer(){
 		
 		
+	}
+	private static DaoComputer INSTANCE=new DaoComputer();
+	
+	public static DaoComputer getInstance() {
+		return INSTANCE;
 	}
 	
 	public ArrayList<ModelComputer> select() {
@@ -61,7 +67,7 @@ public class DaoComputer extends Dao<ModelComputer>{
 	}
 	
 	
-	public ModelComputer selectOne(int id) {
+	public ModelComputer selectOne(int id) throws RequeteSansResultatException {
 		//Connection connexion=null;
 		ModelComputer mC = null;
 		ResultSet resultat =null;
@@ -88,7 +94,8 @@ public class DaoComputer extends Dao<ModelComputer>{
 				    }
 			}
 			else {
-				System.out.println("Pas de resultat");
+				throw new RequeteSansResultatException();
+				
 			}
 			
 
@@ -122,6 +129,7 @@ public class DaoComputer extends Dao<ModelComputer>{
 		    	preparedStatement.setObject(5, model.getCompanyId());
 		    preparedStatement.setInt(6, model.getId());
 		    int statut = preparedStatement.executeUpdate();
+		    
 		    /*
 		    Statement statement=connexion.createStatement();
 		    
@@ -152,10 +160,16 @@ public class DaoComputer extends Dao<ModelComputer>{
 		    preparedStatement.setString(2, model.getName());
 		    preparedStatement.setTimestamp(3, model.getIntroduced());
 		    preparedStatement.setTimestamp(4, model.getDiscontinued());
-		    preparedStatement.setInt(5, model.getCompanyId());
+		    if(model.getCompanyId()==null) {
+		    	preparedStatement.setObject(5, model.getCompanyId());
+		    }else
+		    	preparedStatement.setInt(5, model.getCompanyId());
 		    int statut = preparedStatement.executeUpdate();
 
-		} catch ( SQLException e ) {
+		}catch(java.sql.SQLIntegrityConstraintViolationException iCVE) {
+			System.out.println("besoin d'une id de company existente pour maj et ajout ou d'un id de computer non existente pour ajout ");
+		}
+		catch ( SQLException e ) {
 		    /* Gérer les éventuelles erreurs ici */
 			
 			e.printStackTrace();

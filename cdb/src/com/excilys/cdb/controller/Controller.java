@@ -24,7 +24,8 @@ public class Controller {
     }
     
     //identifie les commandes et appelle des bonnes fonctions 
-    public void requete(String cmd) throws NotIntExpectedException, NotACommandException, AllAttributesNeededException, PasLeBonFormatTimestamp, NotAIntegerException {
+    public void requete(String cmd) throws NotIntExpectedException, NotACommandException, AllAttributesNeededException, PasLeBonFormatTimestamp,
+    NotAIntegerException, RequeteSansResultatException {
     	String[] cmdTab= cmd.split(";");
     	if(cmdTab.length==1) {
     		if(cmdTab[0].equalsIgnoreCase("cl")) {
@@ -56,6 +57,7 @@ public class Controller {
     			int id=-1;
     			try {
     				id=Integer.parseInt(cmdTab[1]);
+    				delete(id);
     			}catch( NumberFormatException e) {
     				throw new NotIntExpectedException();
     			}
@@ -137,7 +139,7 @@ public class Controller {
     	return result;
     }
     
-    String computerDetails(int id) {
+    String computerDetails(int id) throws RequeteSansResultatException {
     	String result="";
     	DtoComputer dC= sComputer.computerDetails(id); 
     	result+=dC.toString()+"\n";
@@ -153,5 +155,8 @@ public class Controller {
     void updateComputer(DtoComputer dC) throws PasLeBonFormatTimestamp, NotAIntegerException {
     	sComputer.updateComputer(dC);
     	
+    }
+    void delete(int id) {
+    	sComputer.deleteComputer(id);
     }
 }

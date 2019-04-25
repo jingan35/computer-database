@@ -33,7 +33,15 @@ public class UI {
     		System.out.println("Quel est vôtre requête ? ");
     		Scanner sc = new Scanner(System.in);
     		try {
-    			c.requete(sc.nextLine());
+    			String request=sc.nextLine();
+    			if(request.startsWith("dc")) {
+    				System.out.println("vous êtes sûr de vouloir supprimer l'ordinateur ?");
+    				if(sc.nextLine().startsWith("o")||sc.nextLine().startsWith("y")) {
+    					c.requete(request);
+    				}else
+    					System.out.println("annulé");
+    			}else
+    				c.requete(request);
     		}catch(NotIntExpectedException nIEE){
     			System.out.println(nIEE.getMessage());
     		}
@@ -48,6 +56,9 @@ public class UI {
     		}
     		catch(NotAIntegerException nAIE) {
     			System.out.println(nAIE.getMessage());
+    		}
+    		catch(RequeteSansResultatException rSRE) {
+    			System.out.println(rSRE.getMessage());
     		}
     	}
     }

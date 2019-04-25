@@ -9,10 +9,15 @@ public class DaoCompany extends Dao<ModelCompany>{
 	/* Création de l'objet gérant les requêtes */
 	Statement statement;
 	
-	public DaoCompany(){
+	private DaoCompany(){
 		
 	}
-
+	private static DaoCompany INSTANCE=new DaoCompany();
+	
+	public static DaoCompany getInstance() {
+		return INSTANCE;
+	}
+	
 	@Override
 	public ArrayList<ModelCompany> select() {
 		// TODO Auto-generated method stub
