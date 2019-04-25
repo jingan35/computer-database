@@ -86,13 +86,30 @@ public class Controller {
     		}
     		
     		else if(cmdTab[0].equalsIgnoreCase("uc")) {
-    			int id=-1;
-    			try {
-    				id=Integer.parseInt(cmdTab[1]);
-    			}catch( NumberFormatException e) {
-    				throw new NotIntExpectedException();
+	    		if(cmdTab.length==6) {
+	    			int id=-1;
+	    			try {
+	    				id=Integer.parseInt(cmdTab[1]);
+	    			}catch( NumberFormatException e) {
+	    				throw new NotIntExpectedException();
+	    			}
+	    			DtoComputer dtoToUpdate = new DtoComputer(cmdTab[1],cmdTab[2],"null","null","null");
+    				if(!cmdTab[3].equals("n")) {
+    					dtoToUpdate.setIntroduced(cmdTab[3]);
+    				}
+    				if(!cmdTab[4].equals("n")) {
+    					dtoToUpdate.setDiscontinued(cmdTab[4]);
+    				}
+    				if(!cmdTab[5].equals("n")) {
+    					dtoToUpdate.setCompanyId(cmdTab[5]);
+    				}
+    				
+	    			//fonction pour update d'un computer
+    				updateComputer(dtoToUpdate);
+	    		}
+	    		else {
+    				throw new AllAttributesNeededException();
     			}
-    			//fonction pour update d'un computer
     		}
     		else {
     			throw new NotACommandException();
@@ -130,6 +147,11 @@ public class Controller {
     
     void insertComputer(DtoComputer dC) throws PasLeBonFormatTimestamp, NotAIntegerException {
     	sComputer.insertComputer(dC);
+    	
+    }
+    
+    void updateComputer(DtoComputer dC) throws PasLeBonFormatTimestamp, NotAIntegerException {
+    	sComputer.updateComputer(dC);
     	
     }
 }

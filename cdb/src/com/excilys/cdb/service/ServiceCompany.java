@@ -10,7 +10,7 @@ import com.excilys.cdb.persistance.DaoCompany;
 public class ServiceCompany {
 	private ServiceCompany()
     {}
- 
+	DaoCompany dC = new DaoCompany();
     /** Instance unique pré-initialisée */
     private static ServiceCompany INSTANCE = new ServiceCompany();
      
@@ -21,7 +21,7 @@ public class ServiceCompany {
 	
 			
 			public ArrayList<DtoCompany> selectCompany(){
-				DaoCompany dC = new DaoCompany();
+				
 		  		//le liste renvoyée
 		  		ArrayList<DtoCompany> resultList = new ArrayList<DtoCompany>();
 		  		ArrayList<ModelCompany> list= dC.select();

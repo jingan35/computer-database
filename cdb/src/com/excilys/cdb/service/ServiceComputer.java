@@ -14,6 +14,7 @@ public class ServiceComputer {
 	private ServiceComputer()
     {}
  
+	DaoComputer daoComputer = new DaoComputer();
     /** Instance unique pré-initialisée */
     private static ServiceComputer INSTANCE = new ServiceComputer();
      
@@ -25,10 +26,10 @@ public class ServiceComputer {
  
   	
   	public ArrayList<DtoComputer> selectComputer(){
-  		DaoComputer dC = new DaoComputer();
+  		
   		//le liste renvoyée
   		ArrayList<DtoComputer> resultList = new ArrayList<DtoComputer>();
-  		ArrayList<ModelComputer> list= dC.select();
+  		ArrayList<ModelComputer> list= daoComputer.select();
   		for(int i=0;i<list.size();i++) {
   			resultList.add(MapperComputer.modelComputerToDtoComputer(list.get(i)));
   		}
@@ -37,8 +38,8 @@ public class ServiceComputer {
   	}
 	
   	public DtoComputer computerDetails(int id) {
-  		DaoComputer dc = new DaoComputer();
-  		ModelComputer mc = dc.selectOne(id);
+  		
+  		ModelComputer mc = daoComputer.selectOne(id);
   		
   		DtoComputer result=MapperComputer.modelComputerToDtoComputer(mc);
   		return result;
@@ -46,9 +47,14 @@ public class ServiceComputer {
   	
   	public void insertComputer(DtoComputer dtoComputer) throws PasLeBonFormatTimestamp, NotAIntegerException {
   		ModelComputer computerToAdd = MapperComputer.dtoComputerToModelComputer( dtoComputer);
-  		DaoComputer daoComputer = new DaoComputer();
+  		
   		daoComputer.insert(computerToAdd);
   		
+  	}
+  	
+  	public void updateComputer(DtoComputer dtoComputer) throws PasLeBonFormatTimestamp, NotAIntegerException {
+  		ModelComputer computerToUpdate = MapperComputer.dtoComputerToModelComputer( dtoComputer);
+  		daoComputer.update(computerToUpdate.getId(), computerToUpdate);
   	}
   	
   	

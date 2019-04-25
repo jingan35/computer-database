@@ -66,10 +66,12 @@ public class DaoComputer extends Dao<ModelComputer>{
 		ModelComputer mC = null;
 		ResultSet resultat =null;
 		try (Connection connexion = DriverManager.getConnection( url, utilisateur, motDePasse )){
-		    
-		    Statement statement=connexion.createStatement();
+		    String detailsRequest="SELECT computer.id,computer.name,introduced,discontinued,company.name AS company_name,company.id "
+		    		+ "FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.id=?;";
+		    PreparedStatement preparedStatement=connexion.prepareStatement(detailsRequest);
+		    preparedStatement.setInt(1, id);
 		    /* requête BDD */
-		    resultat = statement.executeQuery( "SELECT computer.id,computer.name,introduced,discontinued,company.name AS company_name,company.id FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.id="+id+";" );
+		    resultat = preparedStatement.executeQuery(  );
 			/* Récupération des données du résultat de la requête de lecture */
 			if(resultat.next()) {
 				int Id = resultat.getInt( "computer.id" );
@@ -107,14 +109,27 @@ public class DaoComputer extends Dao<ModelComputer>{
 		// TODO Auto-generated method stub
 		ResultSet resultat =null;
 		try (Connection connexion = DriverManager.getConnection( url, utilisateur, motDePasse )){
-		    
+			/* requête BDD */
+		    String updateSql= " UPDATE computer SET id = ?, name = ?, introduced = ?, discontinued = ?, company_id=? WHERE id=?;";
+		    PreparedStatement preparedStatement=connexion.prepareStatement(updateSql);
+		    preparedStatement.setInt(1, model.getId());
+		    preparedStatement.setString(2, model.getName());
+		    preparedStatement.setTimestamp(3, model.getIntroduced());
+		    preparedStatement.setTimestamp(4, model.getDiscontinued());
+		    if(model.getCompanyId()!=null)
+		    	preparedStatement.setInt(5, model.getCompanyId());
+		    else
+		    	preparedStatement.setObject(5, model.getCompanyId());
+		    preparedStatement.setInt(6, model.getId());
+		    int statut = preparedStatement.executeUpdate();
+		    /*
 		    Statement statement=connexion.createStatement();
-		    /* requête BDD */
+		    
 		    int statut = statement.executeUpdate(" UPDATE computer SET "
 		    		+ "id = "+model.getId()+", name = '"+model.getName()+"', introduced = "
 		    		+model.getIntroduced()+", discontinued = "+model.getDiscontinued()+", company_id= "+model.getCompanyId()+""
 		    		+ " WHERE id="+id+";");
-			
+			*/
 
 		} catch ( SQLException e ) {
 		    /* Gérer les éventuelles erreurs ici */
@@ -131,9 +146,6 @@ public class DaoComputer extends Dao<ModelComputer>{
 		    
 		    Statement statement=connexion.createStatement();
 		    /* requête BDD */
-		    int statut = statement.executeUpdate( "INSERT INTO computer (id,name,introduced,discontinued,company_id) "
-		    		+ "VALUES ("+model.getId()+", '"+model.getName()+"', "+model.getIntroduced()+","+ model.getDiscontinued()+","+ model.getCompanyId()+");" );
-		    
 		    String insertSql= "INSERT INTO computer (id,name,introduced,discontinued,company_id) VALUES (?, ?, ?, ?, ?);" ;
 		    PreparedStatement preparedStatement= connexion.prepareStatement(insertSql);
 		    preparedStatement.setInt(1, model.getId());
@@ -141,6 +153,7 @@ public class DaoComputer extends Dao<ModelComputer>{
 		    preparedStatement.setTimestamp(3, model.getIntroduced());
 		    preparedStatement.setTimestamp(4, model.getDiscontinued());
 		    preparedStatement.setInt(5, model.getCompanyId());
+		    int statut = preparedStatement.executeUpdate();
 
 		} catch ( SQLException e ) {
 		    /* Gérer les éventuelles erreurs ici */
@@ -155,9 +168,11 @@ public class DaoComputer extends Dao<ModelComputer>{
 				ResultSet resultat =null;
 				try (Connection connexion = DriverManager.getConnection( url, utilisateur, motDePasse )){
 				    
-				    Statement statement=connexion.createStatement();
+				    String deleteRequest ="DELETE FROM computer WHERE id=?;";
+				    PreparedStatement preparedStatement=connexion.prepareStatement(deleteRequest);
+				    preparedStatement.setInt(1, id);
 				    /* requête BDD */
-				    int statut = statement.executeUpdate( "DELETE FROM computer WHERE id='"+ id +"';");
+				    int statut = preparedStatement.executeUpdate( );
 					
 
 				} catch ( SQLException e ) {
