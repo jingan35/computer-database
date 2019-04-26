@@ -20,11 +20,11 @@ public class ServiceCompany {
     }
 	
 			
-			public ArrayList<DtoCompany> selectCompany(){
+			public ArrayList<DtoCompany> selectCompany(int nbRowByPage,int page){
 				
 		  		//le liste renvoyée
 		  		ArrayList<DtoCompany> resultList = new ArrayList<DtoCompany>();
-		  		ArrayList<ModelCompany> list= dC.select();
+		  		ArrayList<ModelCompany> list= dC.select(nbRowByPage,page);
 		  		for(int i=0;i<list.size();i++) {
 		  			resultList.add(MapperCompany.modelCompanyToDtoCompany(list.get(i)));
 		  		}

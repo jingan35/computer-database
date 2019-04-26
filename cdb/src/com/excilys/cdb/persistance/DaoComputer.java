@@ -19,13 +19,16 @@ public class DaoComputer extends Dao<ModelComputer>{
 		return INSTANCE;
 	}
 	
-	public ArrayList<ModelComputer> select() {
+	public ArrayList<ModelComputer> select(int nbRowByPage,int page) {
 		ArrayList<ModelComputer> computerList = new ArrayList<ModelComputer>();
 		ResultSet resultat =null;
 		try (Connection connexion=DriverManager.getConnection( url, utilisateur, motDePasse )){
-		    Statement statement=connexion.createStatement();
+			String requete="SELECT * FROM computer LIMIT ? OFFSET ?;";
+		    PreparedStatement preparedStatement=connexion.prepareStatement(requete);
+		    preparedStatement.setInt(1, nbRowByPage);
+		    preparedStatement.setInt(2, nbRowByPage*(page-1));
 		    /* requête BDD */
-		    resultat = statement.executeQuery( "SELECT * FROM computer;" );
+		    resultat = preparedStatement.executeQuery( );
 		    
 		    if ( resultat.next() ) {
 			    int id = resultat.getInt( "id" );

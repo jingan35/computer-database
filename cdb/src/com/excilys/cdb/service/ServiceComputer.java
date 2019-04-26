@@ -26,11 +26,11 @@ public class ServiceComputer {
 	
  
   	
-  	public ArrayList<DtoComputer> selectComputer(){
+  	public ArrayList<DtoComputer> selectComputer(int nbRowByPage,int page){
   		
   		//le liste renvoyée
   		ArrayList<DtoComputer> resultList = new ArrayList<DtoComputer>();
-  		ArrayList<ModelComputer> list= daoComputer.select();
+  		ArrayList<ModelComputer> list= daoComputer.select(nbRowByPage,page);
   		for(int i=0;i<list.size();i++) {
   			resultList.add(MapperComputer.modelComputerToDtoComputer(list.get(i)));
   		}

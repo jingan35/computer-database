@@ -10,7 +10,7 @@ public abstract class Dao<T> {
 	public abstract void update(int id, T maj);
 	public abstract void insert(T model);
 	public abstract void delete(int id);
-	public abstract ArrayList<T> select();
+	public abstract ArrayList<T> select(int nbRowByPage,int page);
 	
 
 }

@@ -7,6 +7,8 @@ import com.excilys.cdb.service.ServiceCompany;
 
 public class UI {
 	
+	private int nbElementsByPages=20;
+	
 	private UI()
     {}
  
@@ -24,8 +26,8 @@ public class UI {
     	boolean stop=false;
     	while (!stop) {
     		System.out.println("Help "
-    				+ "\nComputers list : cl "
-    				+ "\nCompanies list : lc "
+    				+ "\nComputers list : cl;page "
+    				+ "\nCompanies list : lc;page "
     				+ "\nUpdate a Computer info : uc; id ;AttributeToModify ; NewValue; AttributeToModify2; NewValue2;etc.. "
     				+ "\nDelete a Computer : dc; id "
     				+ "\nShow a computer Details: sc;id "
@@ -36,12 +38,22 @@ public class UI {
     			String request=sc.nextLine();
     			if(request.startsWith("dc")) {
     				System.out.println("vous êtes sûr de vouloir supprimer l'ordinateur ?");
-    				if(sc.nextLine().startsWith("o")||sc.nextLine().startsWith("y")) {
-    					c.requete(request);
+    				String confirmation= sc.nextLine();
+    				if(confirmation.startsWith("o")||confirmation.startsWith("y")) {
+    					c.requete(request,nbElementsByPages);
     				}else
     					System.out.println("annulé");
-    			}else
-    				c.requete(request);
+    			}else if(request.startsWith("page")) {
+    				String[] requestTab=request.split(";");
+    				if(requestTab.length==2) {
+	        			try {
+	        				nbElementsByPages=Integer.parseInt(requestTab[1]);
+	        			}catch( NumberFormatException e) {
+	        				throw new NotIntExpectedException();
+	        			}
+    				}
+        		}else
+    				c.requete(request,nbElementsByPages);
     		}catch(NotIntExpectedException nIEE){
     			System.out.println(nIEE.getMessage());
     		}
@@ -60,6 +72,10 @@ public class UI {
     		catch(RequeteSansResultatException rSRE) {
     			System.out.println(rSRE.getMessage());
     		}
+    		catch(NotIntForPageException nIFPE) {
+    			System.out.println(nIFPE.getMessage());
+    		}
+    		sc.close();
     	}
     }
 

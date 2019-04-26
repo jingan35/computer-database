@@ -18,16 +18,19 @@ public class DaoCompany extends Dao<ModelCompany>{
 		return INSTANCE;
 	}
 	
-	@Override
-	public ArrayList<ModelCompany> select() {
+
+	public ArrayList<ModelCompany> select(int nbRowByPage,int page) {
 		// TODO Auto-generated method stub
 		ArrayList<ModelCompany> companyList = new ArrayList<ModelCompany>();
 		ResultSet resultat =null;
 		try (Connection connexion = DriverManager.getConnection( url, utilisateur, motDePasse )){
 		    
-		    Statement statement=connexion.createStatement();
+			String requete="SELECT * FROM company LIMIT ? OFFSET ?;";
+		    PreparedStatement preparedStatement=connexion.prepareStatement(requete);
+		    preparedStatement.setInt(1, nbRowByPage);
+		    preparedStatement.setInt(2, nbRowByPage*(page-1));
 		    /* requête BDD */
-		    resultat = statement.executeQuery( "SELECT * FROM company;" );
+		    resultat = preparedStatement.executeQuery( );
 		    
 			/* Récupération des données du résultat de la requête de lecture */
 			while ( resultat.next() ) {
