@@ -58,9 +58,9 @@ public class DaoCompany extends Dao<ModelCompany>{
 	}
 
 	@Override
-	public void insert(ModelCompany model) {
+	public int insert(ModelCompany model) {
 		// TODO Auto-generated method stub
-		
+		return 0;
 	}
 
 	@Override

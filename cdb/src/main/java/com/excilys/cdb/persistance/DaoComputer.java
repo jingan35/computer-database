@@ -87,7 +87,7 @@ public class DaoComputer extends Dao<ModelComputer>{
 			if(resultat.next()) {
 				int Id = resultat.getInt( "computer.id" );
 				String name = resultat.getString( "computer.name" );
-				int cId = resultat.getInt( "company.id" );
+				Integer cId = (Integer)(resultat.getObject( "company.id" ));
 				Timestamp introduced = resultat.getTimestamp( "introduced" );
 				Timestamp discontinued = resultat.getTimestamp( "discontinued" );
 				String companyName = resultat.getString( "company_name" );
@@ -119,10 +119,11 @@ public class DaoComputer extends Dao<ModelComputer>{
 	public void update(int id, ModelComputer model) {	
 		// TODO Auto-generated method stub
 		ResultSet resultat =null;
+		int idUpdated=0;
 		try (Connection connexion = DriverManager.getConnection( url, utilisateur, motDePasse )){
 			/* requête BDD */
 		    String updateSql= " UPDATE computer SET id = ?, name = ?, introduced = ?, discontinued = ?, company_id=? WHERE id=?;";
-		    PreparedStatement preparedStatement=connexion.prepareStatement(updateSql);
+		    PreparedStatement preparedStatement=connexion.prepareStatement(updateSql,Statement.RETURN_GENERATED_KEYS);
 		    preparedStatement.setInt(1, model.getId());
 		    preparedStatement.setString(2, model.getName());
 		    preparedStatement.setTimestamp(3, model.getIntroduced());
@@ -133,6 +134,9 @@ public class DaoComputer extends Dao<ModelComputer>{
 		    	preparedStatement.setObject(5, model.getCompanyId());
 		    preparedStatement.setInt(6, model.getId());
 		    int statut = preparedStatement.executeUpdate();
+		    ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+		    if(generatedKeys.next())
+		    	idUpdated=generatedKeys.getInt(1);
 		    
 		    /*
 		    Statement statement=connexion.createStatement();
@@ -151,15 +155,16 @@ public class DaoComputer extends Dao<ModelComputer>{
 	}
 
 	@Override
-	public void insert(ModelComputer model) {
+	public int insert(ModelComputer model) {
 		// TODO Auto-generated method stub
 		ResultSet resultat =null;
+		int idAdded=0;
 		try(Connection connexion = DriverManager.getConnection( url, utilisateur, motDePasse )) {
 		    
 		    /* requête BDD */
 			
 		    String insertSql= "INSERT INTO computer (id,name,introduced,discontinued,company_id) VALUES (?, ?, ?, ?, ?);" ;
-		    PreparedStatement preparedStatement= connexion.prepareStatement(insertSql);
+		    PreparedStatement preparedStatement= connexion.prepareStatement(insertSql,Statement.RETURN_GENERATED_KEYS);
 		    preparedStatement.setInt(1, model.getId());
 		    preparedStatement.setString(2, model.getName());
 		    preparedStatement.setTimestamp(3, model.getIntroduced());
@@ -169,6 +174,10 @@ public class DaoComputer extends Dao<ModelComputer>{
 		    }else
 		    	preparedStatement.setInt(5, model.getCompanyId());
 		    int statut = preparedStatement.executeUpdate();
+		    ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+		    if(generatedKeys.next())
+		    	idAdded=generatedKeys.getInt(1);
+		    
 
 		}catch(java.sql.SQLIntegrityConstraintViolationException iCVE) {
 			System.out.println("besoin d'une id de company existente pour maj et ajout ou d'un id de computer non existente pour ajout ");
@@ -177,7 +186,9 @@ public class DaoComputer extends Dao<ModelComputer>{
 		    /* Gérer les éventuelles erreurs ici */
 			
 			e.printStackTrace();
-		} 
+		}
+		
+		return idAdded;
 	}
 
 	@Override

@@ -7,7 +7,7 @@ public class ModelComputer {
 	private String name;
 	private Timestamp introduced;
 	private Timestamp discontinued;
-	private Integer company_id;
+	private Integer company_id=null;
 	private String companyName=null;
 	
 	public ModelComputer(){
@@ -15,10 +15,10 @@ public class ModelComputer {
 		name="";
 		introduced=null;
 		discontinued=null;
-		company_id=-1;
+		company_id=null;
 	}
 	
-	public ModelComputer(int id, String name,Timestamp introduced, Timestamp discontinued,int company_id){
+	public ModelComputer(int id, String name,Timestamp introduced, Timestamp discontinued,Integer company_id){
 		this.id= id;
 		this.name=name;
 		this.introduced=introduced;

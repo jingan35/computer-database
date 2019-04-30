@@ -10,7 +10,7 @@ public abstract class Dao<T> {
 	String utilisateur = "admincdb";
 	String motDePasse = "qwerty1234";
 	public abstract void update(int id, T maj);
-	public abstract void insert(T model);
+	public abstract int insert(T model);
 	public abstract void delete(int id);
 	public abstract ArrayList<T> select(int nbRowByPage,int page) throws BaseVide;
 	
