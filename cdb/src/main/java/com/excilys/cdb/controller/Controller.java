@@ -26,7 +26,7 @@ public class Controller {
     //identifie les commandes et appelle des bonnes fonctions 
     
     public void requete(String cmd, int nbRowByPage) throws NotIntExpectedException, NotACommandException, AllAttributesNeededException, PasLeBonFormatTimestamp,
-    NotAIntegerException, RequeteSansResultatException, NotIntForPageException, TimestampDiscotinuedInferiorToTimestampIntroduced, BaseVide {
+    NotAIntegerException, RequeteSansResultatException, NotIntForPageException, TimestampDiscotinuedInferiorToTimestampIntroduced, BaseVide, PasDePagesNegException {
     	String[] cmdTab= cmd.split(";");
     	if(cmdTab.length==2) {
     		if(cmdTab[0].equalsIgnoreCase("cl")) {
@@ -49,12 +49,7 @@ public class Controller {
     			//liste des compagnies
     			companyList(nbRowByPage,page);
     		}
-    		else {
-    			throw new NotACommandException();
-    		}
-    	}
-    	else {
-    		if(cmdTab[0].equalsIgnoreCase("sc")) {
+    		else if(cmdTab[0].equalsIgnoreCase("sc")) {
     			//
     			System.out.println("ds le sc");
     			int id=-1;
@@ -76,8 +71,14 @@ public class Controller {
     			}
     			//fonction pour sppr
     		}
+    		else {
+    			throw new NotACommandException();
+    		}
+    	}
+    	else {
     		
-    		else if(cmdTab[0].equalsIgnoreCase("ac")) {
+    		
+    		if(cmdTab[0].equalsIgnoreCase("ac")) {
     			//si tous les attributs du nouvel ordinateur données
     			if(cmdTab.length==6) {
     				//fonction pour l'ajout d'un computer
@@ -132,7 +133,7 @@ public class Controller {
     	}
     }
     
-    String computerList(int nbRowByPage,int page) throws BaseVide {
+    String computerList(int nbRowByPage,int page) throws BaseVide, PasDePagesNegException {
     	ArrayList<DtoComputer> computerList=sComputer.selectComputer(nbRowByPage,page);
     	String result="";
     	for(int i=0;i<computerList.size();i++) {

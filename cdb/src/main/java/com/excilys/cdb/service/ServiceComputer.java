@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.excilys.cdb.exception.BaseVide;
 import com.excilys.cdb.exception.NotAIntegerException;
+import com.excilys.cdb.exception.PasDePagesNegException;
 import com.excilys.cdb.exception.PasLeBonFormatTimestamp;
 import com.excilys.cdb.exception.RequeteSansResultatException;
 import com.excilys.cdb.exception.TimestampDiscotinuedInferiorToTimestampIntroduced;
@@ -28,11 +29,13 @@ public class ServiceComputer {
 	
  
   	
-  	public ArrayList<DtoComputer> selectComputer(int nbRowByPage,int page) throws BaseVide{
+  	public ArrayList<DtoComputer> selectComputer(int nbRowByPage,int page) throws BaseVide, PasDePagesNegException{
   		
   		//le liste renvoyée
   		ArrayList<DtoComputer> resultList = new ArrayList<DtoComputer>();
   		ArrayList<ModelComputer> list= daoComputer.select(nbRowByPage,page);
+  		if(page<=0)
+  			throw new PasDePagesNegException();
   		for(int i=0;i<list.size();i++) {
   			resultList.add(MapperComputer.modelComputerToDtoComputer(list.get(i)));
   		}

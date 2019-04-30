@@ -104,12 +104,11 @@ public class DaoComputer extends Dao<ModelComputer>{
 			}
 			
 
-		} catch ( SQLException e ) {
-		    /* Gérer les éventuelles erreurs ici */
-			
+		}
+		/* Exécution d'une requête de lecture */ 
+		catch (SQLException e) {
 			e.printStackTrace();
 		}
-		/* Exécution d'une requête de lecture */
 		
 		return mC;
 		

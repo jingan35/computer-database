@@ -24,6 +24,7 @@ public class UI {
     
     public void start() {
     	boolean stop=false;
+    	Scanner sc = new Scanner(System.in);
     	while (!stop) {
     		System.out.println("Help "
     				+ "\nComputers list : cl;page "
@@ -33,7 +34,7 @@ public class UI {
     				+ "\nShow a computer Details: sc;id "
     				+ "\nAdd a computer: ac; id; name; introducedTimestamp('n' if null); discontinuedTimestamp('n' if null); company_id "); 
     		System.out.println("Quel est vôtre requête ? ");
-    		Scanner sc = new Scanner(System.in);
+    		
     		try {
     			String request=sc.nextLine();
     			if(request.startsWith("dc")) {
@@ -80,8 +81,12 @@ public class UI {
     		catch(BaseVide bV) {
     			System.out.println(bV.getMessage());
     		}
-    		sc.close();
+    		catch(PasDePagesNegException pDPNE) {
+    			System.out.println(pDPNE.getMessage());
+    		}
+    		
     	}
+    	sc.close();
     }
 
 }
