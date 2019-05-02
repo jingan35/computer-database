@@ -1,6 +1,10 @@
 package com.excilys.cdb.ui;
 
 import java.util.Scanner;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.cdb.controller.Controller;
 import com.excilys.cdb.exception.*;
 import com.excilys.cdb.service.ServiceCompany;
@@ -55,34 +59,11 @@ public class UI {
     				}
         		}else
     				c.requete(request,nbElementsByPages);
-    		}catch(NotIntExpectedException nIEE){
-    			System.out.println(nIEE.getMessage());
-    		}
-    		catch(NotACommandException nACE){
-    			System.out.println(nACE.getMessage());
-    		}
-    		catch(AllAttributesNeededException aANE) {
-    			System.out.println(aANE.getMessage());
-    		}
-    		catch(PasLeBonFormatTimestamp pLBFTs) {
-    			System.out.println(pLBFTs.getMessage());
-    		}
-    		catch(NotAIntegerException nAIE) {
-    			System.out.println(nAIE.getMessage());
-    		}
-    		catch(RequeteSansResultatException rSRE) {
-    			System.out.println(rSRE.getMessage());
-    		}
-    		catch(NotIntForPageException nIFPE) {
-    			System.out.println(nIFPE.getMessage());
-    		}catch(TimestampDiscotinuedInferiorToTimestampIntroduced tditti) {
-    			System.out.println(tditti.getMessage());
-    		}
-    		catch(BaseVide bV) {
-    			System.out.println(bV.getMessage());
-    		}
-    		catch(PasDePagesNegException pDPNE) {
-    			System.out.println(pDPNE.getMessage());
+    		}catch(NotIntExpectedException | NotACommandException | AllAttributesNeededException| PasLeBonFormatTimestamp |
+    				NotAIntegerException | RequeteSansResultatException| NotIntForPageException| TimestampDiscotinuedInferiorToTimestampIntroduced 
+    				|BaseVide |PasDePagesNegException  e){
+    			Logger logger = LoggerFactory.getLogger(UI.class);
+    			logger.info(e.getMessage());
     		}
     		
     	}

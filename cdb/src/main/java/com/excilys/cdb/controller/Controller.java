@@ -143,7 +143,7 @@ public class Controller {
     	return result;
     }
     
-    String companyList(int nbRowByPage,int page) {
+    String companyList(int nbRowByPage,int page) throws BaseVide {
     	ArrayList<DtoCompany> companyList=sCompany.selectCompany(nbRowByPage,page);
     	String result="";
     	for(int i=0;i<companyList.size();i++) {

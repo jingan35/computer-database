@@ -2,6 +2,9 @@ package com.excilys.cdb.persistance;
 import java.sql.*;
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.cdb.exception.BaseVide;
 import com.excilys.cdb.exception.RequeteSansResultatException;
 import com.excilys.cdb.exception.TimestampDiscotinuedInferiorToTimestampIntroduced;
@@ -62,7 +65,8 @@ public class DaoComputer extends Dao<ModelComputer>{
 		} catch ( SQLException e ) {
 		    /* Gérer les éventuelles erreurs ici */
 			
-			e.printStackTrace();
+			Logger logger = LoggerFactory.getLogger(DaoCompany.class);
+			logger.trace(e.getMessage(), e);
 		} 
 		/* Exécution d'une requête de lecture */
 		

@@ -2,6 +2,7 @@ package com.excilys.cdb.service;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
+import com.excilys.cdb.exception.BaseVide;
 import com.excilys.cdb.mapper.DtoCompany;
 import com.excilys.cdb.mapper.DtoCompany;
 import com.excilys.cdb.model.*;
@@ -20,7 +21,7 @@ public class ServiceCompany {
     }
 	
 			
-			public ArrayList<DtoCompany> selectCompany(int nbRowByPage,int page){
+			public ArrayList<DtoCompany> selectCompany(int nbRowByPage,int page) throws BaseVide{
 				
 		  		//le liste renvoyée
 		  		ArrayList<DtoCompany> resultList = new ArrayList<DtoCompany>();

@@ -2,7 +2,12 @@ package com.excilys.cdb.persistance;
 import java.sql.*;
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.excilys.cdb.exception.BaseVide;
 import com.excilys.cdb.model.*;
+import com.excilys.cdb.ui.UI;
 
 public class DaoCompany extends Dao<ModelCompany>{
 	Connection connexion;
@@ -19,7 +24,7 @@ public class DaoCompany extends Dao<ModelCompany>{
 	}
 	
 
-	public ArrayList<ModelCompany> select(int nbRowByPage,int page) {
+	public ArrayList<ModelCompany> select(int nbRowByPage,int page) throws BaseVide {
 		// TODO Auto-generated method stub
 		ArrayList<ModelCompany> companyList = new ArrayList<ModelCompany>();
 		ResultSet resultat =null;
@@ -32,6 +37,17 @@ public class DaoCompany extends Dao<ModelCompany>{
 		    /* requête BDD */
 		    resultat = preparedStatement.executeQuery( );
 		    
+		    if ( resultat.next() ) {
+			    int id = resultat.getInt( "id" );
+			    String name = resultat.getString( "name" );
+			    //creer le modelComputer et ajout dans la liste
+			    companyList.add(new ModelCompany(id,name));
+			}
+		    
+		    else {
+		    	throw new BaseVide();
+		    }
+		    
 			/* Récupération des données du résultat de la requête de lecture */
 			while ( resultat.next() ) {
 			    int id = resultat.getInt( "id" );
@@ -42,8 +58,8 @@ public class DaoCompany extends Dao<ModelCompany>{
 
 		} catch ( SQLException e ) {
 		    /* Gérer les éventuelles erreurs ici */
-			
-			e.printStackTrace();
+			Logger logger = LoggerFactory.getLogger(DaoCompany.class);
+			logger.trace(e.getMessage(), e);
 		} 
 		/* Exécution d'une requête de lecture */
 		
