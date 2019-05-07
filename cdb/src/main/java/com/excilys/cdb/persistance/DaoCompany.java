@@ -15,6 +15,12 @@ public class DaoCompany extends Dao<ModelCompany>{
 	Statement statement;
 	
 	private DaoCompany(){
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	private static DaoCompany INSTANCE=new DaoCompany();
@@ -59,7 +65,7 @@ public class DaoCompany extends Dao<ModelCompany>{
 		} catch ( SQLException e ) {
 		    /* Gérer les éventuelles erreurs ici */
 			Logger logger = LoggerFactory.getLogger(DaoCompany.class);
-			logger.trace(e.getMessage(), e);
+			logger.error(e.getMessage(), e);
 		} 
 		/* Exécution d'une requête de lecture */
 		

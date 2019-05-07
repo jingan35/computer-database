@@ -63,7 +63,7 @@ public class UI {
     				NotAIntegerException | RequeteSansResultatException| NotIntForPageException| TimestampDiscotinuedInferiorToTimestampIntroduced 
     				|BaseVide |PasDePagesNegException  e){
     			Logger logger = LoggerFactory.getLogger(UI.class);
-    			logger.info(e.getMessage());
+    			logger.error(e.getMessage());
     		}
     		
     	}

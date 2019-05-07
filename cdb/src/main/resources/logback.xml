@@ -28,12 +28,12 @@
    </appender>
 
 
-   <logger name="com.excilys.cdb.ui" level="INFO" additivity="false">
+   <logger name="com.excilys.cdb.ui" level="ALL" additivity="false">
            <appender-ref ref="STDOUT" />
            <appender-ref ref="FILE" />
    </logger>
 
-	<logger name="com.excilys.cdb.persistance" level="TRACE" additivity="false">
+ 	<logger name="com.excilys.cdb.persistance" level="ALL" additivity="false">
            <appender-ref ref="STDOUT" />
            <appender-ref ref="FILE" />
    </logger>

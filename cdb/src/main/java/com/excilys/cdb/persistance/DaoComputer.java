@@ -15,7 +15,12 @@ public class DaoComputer extends Dao<ModelComputer>{
 
 	
 	private DaoComputer(){
-		
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	private static DaoComputer INSTANCE=new DaoComputer();
@@ -66,12 +71,44 @@ public class DaoComputer extends Dao<ModelComputer>{
 		    /* Gérer les éventuelles erreurs ici */
 			
 			Logger logger = LoggerFactory.getLogger(DaoCompany.class);
-			logger.trace(e.getMessage(), e);
+			logger.error(e.getMessage(), e);
 		} 
 		/* Exécution d'une requête de lecture */
 		
 		
 		return computerList;
+		
+	}
+	
+	public int selectCount() throws BaseVide {
+		ArrayList<ModelComputer> computerList = new ArrayList<ModelComputer>();
+		ResultSet resultat =null;
+		int computerCount=0;
+		try (Connection connexion=DriverManager.getConnection( url, utilisateur, motDePasse )){
+			String requete="SELECT COUNT(id) AS idCount FROM computer ;";
+		    PreparedStatement preparedStatement=connexion.prepareStatement(requete);
+		    /* requête BDD */
+		    resultat = preparedStatement.executeQuery( );
+		    
+		    if ( resultat.next() ) {
+			    computerCount= resultat.getInt("idCount");
+			}
+		    
+		    else {
+		    	throw new BaseVide();
+		    }
+		    
+
+		} catch ( SQLException e ) {
+		    /* Gérer les éventuelles erreurs ici */
+			
+			Logger logger = LoggerFactory.getLogger(DaoCompany.class);
+			logger.error(e.getMessage(), e);
+		} 
+		/* Exécution d'une requête de lecture */
+		
+		
+		return computerCount;
 		
 	}
 	
@@ -111,7 +148,8 @@ public class DaoComputer extends Dao<ModelComputer>{
 		}
 		/* Exécution d'une requête de lecture */ 
 		catch (SQLException e) {
-			e.printStackTrace();
+			Logger logger = LoggerFactory.getLogger(DaoCompany.class);
+			logger.error(e.getMessage(), e);
 		}
 		
 		return mC;
@@ -154,7 +192,8 @@ public class DaoComputer extends Dao<ModelComputer>{
 		} catch ( SQLException e ) {
 		    /* Gérer les éventuelles erreurs ici */
 			
-			e.printStackTrace();
+			Logger logger = LoggerFactory.getLogger(DaoCompany.class);
+			logger.error(e.getMessage(), e);
 		} 
 	}
 
@@ -184,12 +223,15 @@ public class DaoComputer extends Dao<ModelComputer>{
 		    
 
 		}catch(java.sql.SQLIntegrityConstraintViolationException iCVE) {
-			System.out.println("besoin d'une id de company existente pour maj et ajout ou d'un id de computer non existente pour ajout ");
+			//System.out.println("besoin d'une id de company existente pour maj et ajout ou d'un id de computer non existente pour ajout ");
+			Logger logger = LoggerFactory.getLogger(DaoCompany.class);
+			logger.error(iCVE.getMessage(), iCVE);
 		}
 		catch ( SQLException e ) {
 		    /* Gérer les éventuelles erreurs ici */
 			
-			e.printStackTrace();
+			Logger logger = LoggerFactory.getLogger(DaoCompany.class);
+			logger.error(e.getMessage(), e);
 		}
 		
 		return idAdded;
@@ -211,7 +253,8 @@ public class DaoComputer extends Dao<ModelComputer>{
 				} catch ( SQLException e ) {
 				    /* Gérer les éventuelles erreurs ici */
 					
-					e.printStackTrace();
+					Logger logger = LoggerFactory.getLogger(DaoCompany.class);
+					logger.error(e.getMessage(), e);
 				} 
 		
 	}

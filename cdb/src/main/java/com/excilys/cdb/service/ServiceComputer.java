@@ -1,6 +1,7 @@
 package com.excilys.cdb.service;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.stream.Stream;
 
 import com.excilys.cdb.exception.BaseVide;
 import com.excilys.cdb.exception.NotAIntegerException;
@@ -14,6 +15,8 @@ import com.excilys.cdb.model.*;
 import com.excilys.cdb.persistance.DaoComputer;
 
 public class ServiceComputer {
+	
+	int countComputers=0;
 	
 	private ServiceComputer()
     {}
@@ -36,9 +39,15 @@ public class ServiceComputer {
   		ArrayList<ModelComputer> list= daoComputer.select(nbRowByPage,page);
   		if(page<=0)
   			throw new PasDePagesNegException();
-  		for(int i=0;i<list.size();i++) {
+  		Stream<ModelComputer> streamModelComputerList= list.stream();
+  		streamModelComputerList.forEach(element ->{
+  			DtoComputer dtoComp= MapperComputer.modelComputerToDtoComputer(element);
+  			resultList.add(dtoComp);
+  			
+  		});
+  		/*for(int i=0;i<list.size();i++) {
   			resultList.add(MapperComputer.modelComputerToDtoComputer(list.get(i)));
-  		}
+  		}*/
 		return resultList;
   		
   	}
@@ -71,6 +80,12 @@ public class ServiceComputer {
   	
   	public void deleteComputer(int id) {
   		daoComputer.delete(id);
+  	}
+  	
+  	public int selectComputerCount() throws BaseVide, PasDePagesNegException{
+  		
+  		return daoComputer.selectCount();
+  		
   	}
   	
   	
