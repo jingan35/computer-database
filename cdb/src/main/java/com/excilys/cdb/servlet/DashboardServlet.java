@@ -1,6 +1,8 @@
 package com.excilys.cdb.servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.exception.BaseVide;
 import com.excilys.cdb.exception.PasDePagesNegException;
+import com.excilys.cdb.mapper.DtoComputer;
 import com.excilys.cdb.persistance.DaoCompany;
 import com.excilys.cdb.service.ServiceComputer;
 
@@ -34,8 +37,9 @@ public class DashboardServlet extends HttpServlet {
 	
 	ServiceComputer serviceComputer = ServiceComputer.getInstance();
 	String currentPage="1";
-	String nbComputersByPage="10";
+	String nbComputersByPage="20";
 	String nbComputers="0";
+	ArrayList<DtoComputer> computersList = new ArrayList<DtoComputer>();
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -54,16 +58,19 @@ public class DashboardServlet extends HttpServlet {
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward( request, response );
-		this.currentPage = (String)this.getServletContext().getAttribute("currentPage");
 		currentPage = (request.getParameter("page") == null) ? "1" : request.getParameter("page");
+		request.setAttribute("currentPage", currentPage);
 		try {
 			nbComputers=String.valueOf(serviceComputer.selectComputerCount());
+			request.setAttribute("nbComputers", nbComputers);
+			computersList= serviceComputer.selectComputer(Integer.parseInt(nbComputersByPage), Integer.parseInt(currentPage));
+			request.setAttribute("computersList", computersList);
 		} catch (BaseVide | PasDePagesNegException e) {
 			Logger logger = LoggerFactory.getLogger(DaoCompany.class);
 			logger.error(e.getMessage(), e);
 		}
-		
+		 
+		this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward( request, response );
 	}
 
 	/**

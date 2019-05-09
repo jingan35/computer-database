@@ -34,21 +34,29 @@ public class DaoComputer extends Dao<ModelComputer>{
 		ResultSet resultat =null;
 		try (Connection connexion=DriverManager.getConnection( url, utilisateur, motDePasse )){
 			String requete="SELECT * FROM computer LIMIT ? OFFSET ?;";
-		    PreparedStatement preparedStatement=connexion.prepareStatement(requete);
+			
+			 String detailsRequest="SELECT computer.id,computer.name,introduced,discontinued,company.name AS company_name,company.id "
+			    		+ "FROM computer LEFT JOIN company ON computer.company_id = company.id LIMIT ? OFFSET ?;";
+			 
+		    PreparedStatement preparedStatement=connexion.prepareStatement(detailsRequest);
 		    preparedStatement.setInt(1, nbRowByPage);
 		    preparedStatement.setInt(2, nbRowByPage*(page-1));
 		    /* requête BDD */
 		    resultat = preparedStatement.executeQuery( );
-		    
+		    ModelComputer currentComputer=null;
 		    if ( resultat.next() ) {
-			    int id = resultat.getInt( "id" );
-			    String name = resultat.getString( "name" );
-			    int cId = resultat.getInt( "company_id" );
-			    Timestamp introduced = resultat.getTimestamp( "introduced" );
-			    Timestamp discontinued = resultat.getTimestamp( "discontinued" );
-			  			    
+		    	int Id = resultat.getInt( "computer.id" );
+				String name = resultat.getString( "computer.name" );
+				Integer cId = (resultat.getInt( "company.id" )!=0)? (resultat.getInt( "company.id" )):null;
+				Timestamp introduced = resultat.getTimestamp( "introduced" );
+				Timestamp discontinued = resultat.getTimestamp( "discontinued" );
+				String companyName = resultat.getString( "company_name" );
+				currentComputer = new ModelComputer(Id,name,introduced,discontinued,cId);
+				if(companyName!=null) {
+					currentComputer.setCompanyName(companyName);
+				 }
 			    //creer le modelComputer et ajout dans la liste
-			    computerList.add(new ModelComputer(id,name,introduced,discontinued,cId));
+			    computerList.add(currentComputer);
 			}
 		    
 		    else {
@@ -57,14 +65,19 @@ public class DaoComputer extends Dao<ModelComputer>{
 		    
 			/* Récupération des données du résultat de la requête de lecture */
 			while ( resultat.next() ) {
-			    int id = resultat.getInt( "id" );
-			    String name = resultat.getString( "name" );
-			    int cId = resultat.getInt( "company_id" );
-			    Timestamp introduced = resultat.getTimestamp( "introduced" );
-			    Timestamp discontinued = resultat.getTimestamp( "discontinued" );
-			  			    
-			    //creer le modelComputer et ajout dans la liste
-			    computerList.add( new ModelComputer(id,name,introduced,discontinued,cId));
+				int Id = resultat.getInt( "computer.id" );
+				String name = resultat.getString( "computer.name" );
+				Integer cId = (Integer)(resultat.getInt( "company.id" ));
+				Timestamp introduced = resultat.getTimestamp( "introduced" );
+				Timestamp discontinued = resultat.getTimestamp( "discontinued" );
+				String companyName = resultat.getString( "company_name" );
+				    
+				    //creer le modelComputer
+				currentComputer = new ModelComputer(Id,name,introduced,discontinued,cId);
+				if(companyName!=null) {
+					currentComputer.setCompanyName(companyName);
+				 }
+				computerList.add(currentComputer);
 			}
 
 		} catch ( SQLException e ) {
