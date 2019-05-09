@@ -102,17 +102,17 @@
         <div class="container text-center">
             <ul class="pagination">
                 <li>
-                    <a href="#" aria-label="Previous">
+                    <a href="?page=${firstArrow}" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                   </a>
               </li>
-              <li><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
-              <li><a href="#">5</a></li>
+              <li><a href= >${pagination-2 }</a></li>
+              <li><a href="?page=${pagination-1}">${pagination-1 }</a></li>
+              <li><a href="?page=${pagination}">${pagination }</a></li>
+              <li><a href="?page=${pagination+1}">${pagination+1 }</a></li>
+              <li><a href="?page=${pagination+2}">${pagination+2 }</a></li>
               <li>
-                <a href="#" aria-label="Next">
+                <a href="?page=${secondArrow}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
