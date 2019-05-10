@@ -60,11 +60,20 @@ public class DashboardServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		currentPage = (request.getParameter("page") == null) ? "1" : request.getParameter("page");
 		request.setAttribute("currentPage", currentPage);
+		
 		try {
 			nbComputers=String.valueOf(serviceComputer.selectComputerCount());
 			request.setAttribute("nbComputers", nbComputers);
-			computersList= serviceComputer.selectComputer(Integer.parseInt(nbComputersByPage), Integer.parseInt(currentPage));
+			computersList= (request.getParameter("search")==null)?(serviceComputer.selectComputer(Integer.parseInt(nbComputersByPage), Integer.parseInt(currentPage)))
+					:(serviceComputer.selectComputerSearch(Integer.parseInt(nbComputersByPage), Integer.parseInt(currentPage),request.getParameter("search")));
 			request.setAttribute("computersList", computersList);
+			int lastPage = Integer.parseInt(nbComputers)/Integer.parseInt(nbComputersByPage);
+			request.setAttribute("pagination", getPagination(Integer.parseInt(currentPage),lastPage));
+			int firstArrow= ((Integer.parseInt(currentPage)-5)>=1)?(Integer.parseInt(currentPage)-5):1;
+			int secondArrow= ((Integer.parseInt(currentPage)+5)<=lastPage)?(Integer.parseInt(currentPage)+5):lastPage;
+			request.setAttribute("firstArrow", firstArrow);
+			request.setAttribute("secondArrow", secondArrow);
+			
 		} catch (BaseVide | PasDePagesNegException e) {
 			Logger logger = LoggerFactory.getLogger(DaoCompany.class);
 			logger.error(e.getMessage(), e);
@@ -73,6 +82,10 @@ public class DashboardServlet extends HttpServlet {
 		this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward( request, response );
 	}
 
+	protected int getPagination(int currentPage,int lastPage) {
+		return Math.max(3, Math.min(lastPage-2, currentPage));
+	}
+	
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */

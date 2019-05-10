@@ -1,6 +1,10 @@
 package com.excilys.cdb.persistance;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +15,11 @@ import com.excilys.cdb.exception.TimestampDiscotinuedInferiorToTimestampIntroduc
 import com.excilys.cdb.model.*;
 
 
-public class DaoComputer extends Dao<ModelComputer>{
+public class DaoComputer {
+	
+	Properties prop = new Properties();
+    InputStream input = null;
+    String url, utilisateur, motDePasse;
 
 	
 	private DaoComputer(){
@@ -19,8 +27,23 @@ public class DaoComputer extends Dao<ModelComputer>{
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
+			Logger logger = LoggerFactory.getLogger(DaoCompany.class);
+			logger.error(e.getMessage(), e);
+		}
+		
+		
+		// load a properties file
+	    try {
+	    	input = getClass().getResourceAsStream("/config.properties");
+			prop.load(input);
+			url = prop.getProperty("url");
+			utilisateur= prop.getProperty("utilisateur");
+			motDePasse= prop.getProperty("motDePasse");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 		
 	}
 	private static DaoComputer INSTANCE=new DaoComputer();
@@ -29,14 +52,15 @@ public class DaoComputer extends Dao<ModelComputer>{
 		return INSTANCE;
 	}
 	
-	public ArrayList<ModelComputer> select(int nbRowByPage,int page) throws BaseVide {
+	public ArrayList<ModelComputer> select(int nbRowByPage,int page,String search) throws BaseVide {
 		ArrayList<ModelComputer> computerList = new ArrayList<ModelComputer>();
 		ResultSet resultat =null;
 		try (Connection connexion=DriverManager.getConnection( url, utilisateur, motDePasse )){
-			String requete="SELECT * FROM computer LIMIT ? OFFSET ?;";
+			String requete="SELECT id , name , introduced , discontinued , company_id FROM computer LIMIT ? OFFSET ?;";
 			
-			 String detailsRequest="SELECT computer.id,computer.name,introduced,discontinued,company.name AS company_name,company.id "
-			    		+ "FROM computer LEFT JOIN company ON computer.company_id = company.id LIMIT ? OFFSET ?;";
+			 String detailsRequest= (search==null)?("SELECT computer.id,computer.name,introduced,discontinued,company.name AS company_name,company.id "
+			    		+ "FROM computer LEFT JOIN company ON computer.company_id = company.id LIMIT ? OFFSET ?;"):("SELECT computer.id,computer.name,introduced,discontinued,company.name AS company_name,company.id "
+					    		+ "FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name LIKE '%"+search+"%' LIMIT ? OFFSET ?;");
 			 
 		    PreparedStatement preparedStatement=connexion.prepareStatement(detailsRequest);
 		    preparedStatement.setInt(1, nbRowByPage);
@@ -170,7 +194,6 @@ public class DaoComputer extends Dao<ModelComputer>{
 		
 	}
 
-	@Override
 	public void update(int id, ModelComputer model) {	
 		// TODO Auto-generated method stub
 		ResultSet resultat =null;
@@ -210,7 +233,6 @@ public class DaoComputer extends Dao<ModelComputer>{
 		} 
 	}
 
-	@Override
 	public int insert(ModelComputer model) {
 		// TODO Auto-generated method stub
 		ResultSet resultat =null;
@@ -250,7 +272,6 @@ public class DaoComputer extends Dao<ModelComputer>{
 		return idAdded;
 	}
 
-	@Override
 	public void delete(int id) {
 		// TODO Auto-generated method stub
 				ResultSet resultat =null;

@@ -20,7 +20,7 @@ public class DaoComputerTest {
 		
 		ArrayList<ModelComputer> listResultatObtenu;
 		
-			listResultatObtenu = daoComp.select(2, 1);
+			listResultatObtenu = daoComp.select(2, 1,null);
 			int tailleObtenu = listResultatObtenu.size();
 			int tailleSouhaite =2;
 			assertEquals("test taille de liste d'ordis", tailleSouhaite, tailleObtenu);

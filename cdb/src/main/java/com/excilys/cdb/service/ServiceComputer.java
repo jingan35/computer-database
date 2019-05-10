@@ -36,7 +36,27 @@ public class ServiceComputer {
   		
   		//le liste renvoyée
   		ArrayList<DtoComputer> resultList = new ArrayList<DtoComputer>();
-  		ArrayList<ModelComputer> list= daoComputer.select(nbRowByPage,page);
+  		ArrayList<ModelComputer> list= daoComputer.select(nbRowByPage,page,null);
+  		if(page<=0)
+  			throw new PasDePagesNegException();
+  		Stream<ModelComputer> streamModelComputerList= list.stream();
+  		streamModelComputerList.forEach(element ->{
+  			DtoComputer dtoComp= MapperComputer.modelComputerToDtoComputer(element);
+  			resultList.add(dtoComp);
+  			
+  		});
+  		/*for(int i=0;i<list.size();i++) {
+  			resultList.add(MapperComputer.modelComputerToDtoComputer(list.get(i)));
+  		}*/
+		return resultList;
+  		
+  	}
+  	
+  	public ArrayList<DtoComputer> selectComputerSearch(int nbRowByPage,int page, String search) throws BaseVide, PasDePagesNegException{
+  		
+  		//le liste renvoyée
+  		ArrayList<DtoComputer> resultList = new ArrayList<DtoComputer>();
+  		ArrayList<ModelComputer> list= daoComputer.select(nbRowByPage,page,search);
   		if(page<=0)
   			throw new PasDePagesNegException();
   		Stream<ModelComputer> streamModelComputerList= list.stream();

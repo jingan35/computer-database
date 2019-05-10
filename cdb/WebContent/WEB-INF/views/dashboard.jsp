@@ -26,7 +26,7 @@
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
-                    <form id="searchForm" action="#" method="GET" class="form-inline">
+                    <form id="searchForm" method="GET" class="form-inline">
 
                         <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" />
                         <input type="submit" id="searchsubmit" value="Filter by name"
@@ -106,11 +106,11 @@
                       <span aria-hidden="true">&laquo;</span>
                   </a>
               </li>
-              <li><a href= >${pagination-2 }</a></li>
-              <li><a href="?page=${pagination-1}">${pagination-1 }</a></li>
-              <li><a href="?page=${pagination}">${pagination }</a></li>
-              <li><a href="?page=${pagination+1}">${pagination+1 }</a></li>
-              <li><a href="?page=${pagination+2}">${pagination+2 }</a></li>
+              <li><a href="?page=${pagination-2}&search=${search}">${pagination-2 }</a></li>
+              <li><a href="?page=${pagination-1}&search=${search}">${pagination-1 }</a></li>
+              <li><a href="?page=${pagination}&search=${search}">${pagination }</a></li>
+              <li><a href="?page=${pagination+1}&search=${search}">${pagination+1 }</a></li>
+              <li><a href="?page=${pagination+2}&search=${search}">${pagination+2 }</a></li>
               <li>
                 <a href="?page=${secondArrow}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>

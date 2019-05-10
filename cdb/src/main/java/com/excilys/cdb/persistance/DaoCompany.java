@@ -1,6 +1,10 @@
 package com.excilys.cdb.persistance;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,15 +13,30 @@ import com.excilys.cdb.exception.BaseVide;
 import com.excilys.cdb.model.*;
 import com.excilys.cdb.ui.UI;
 
-public class DaoCompany extends Dao<ModelCompany>{
+public class DaoCompany {
 	Connection connexion;
 	/* Création de l'objet gérant les requêtes */
 	Statement statement;
+	Properties prop = new Properties();
+    InputStream input = null;
+    String url, utilisateur, motDePasse;
 	
 	private DaoCompany(){
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// load a properties file
+	    try {
+	    	new FileInputStream("config.properties");
+			prop.load(input);
+			url = prop.getProperty("url");
+			utilisateur= prop.getProperty("utilisateur");
+			motDePasse= prop.getProperty("motDePasse");
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -73,21 +92,4 @@ public class DaoCompany extends Dao<ModelCompany>{
 		return companyList;
 	}
 
-	@Override
-	public void update(int id, ModelCompany model) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public int insert(ModelCompany model) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void delete(int id) {
-		// TODO Auto-generated method stub
-		
-	}
 }
