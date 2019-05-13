@@ -102,9 +102,9 @@ public class ServiceComputer {
   		daoComputer.delete(id);
   	}
   	
-  	public int selectComputerCount() throws BaseVide, PasDePagesNegException{
+  	public int selectComputerCount(String search) throws BaseVide, PasDePagesNegException{
   		
-  		return daoComputer.selectCount();
+  		return daoComputer.selectCount(search);
   		
   	}
   	

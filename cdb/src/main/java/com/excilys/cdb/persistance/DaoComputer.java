@@ -117,12 +117,13 @@ public class DaoComputer {
 		
 	}
 	
-	public int selectCount() throws BaseVide {
+	public int selectCount(String search) throws BaseVide {
 		ArrayList<ModelComputer> computerList = new ArrayList<ModelComputer>();
 		ResultSet resultat =null;
 		int computerCount=0;
 		try (Connection connexion=DriverManager.getConnection( url, utilisateur, motDePasse )){
-			String requete="SELECT COUNT(id) AS idCount FROM computer ;";
+			String requete=(search==null)?"SELECT COUNT(id) AS idCount FROM computer ;":("SELECT COUNT(computer.id) AS idCount "
+		    		+ "FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name LIKE '%"+search+"%';");
 		    PreparedStatement preparedStatement=connexion.prepareStatement(requete);
 		    /* requête BDD */
 		    resultat = preparedStatement.executeQuery( );

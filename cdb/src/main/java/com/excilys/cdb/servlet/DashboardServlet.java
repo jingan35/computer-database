@@ -37,8 +37,9 @@ public class DashboardServlet extends HttpServlet {
 	
 	ServiceComputer serviceComputer = ServiceComputer.getInstance();
 	String currentPage="1";
-	String nbComputersByPage="20";
+	String nbComputersByPage="10";
 	String nbComputers="0";
+	String searched=null;
 	ArrayList<DtoComputer> computersList = new ArrayList<DtoComputer>();
 	
 	private static final long serialVersionUID = 1L;
@@ -59,15 +60,18 @@ public class DashboardServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		currentPage = (request.getParameter("page") == null) ? "1" : request.getParameter("page");
+		searched = (request.getParameter("search") == null) ? null : request.getParameter("search");
 		request.setAttribute("currentPage", currentPage);
+		request.setAttribute("search", searched);
 		
 		try {
-			nbComputers=String.valueOf(serviceComputer.selectComputerCount());
+			nbComputers=(searched==null)?(String.valueOf(serviceComputer.selectComputerCount(null))):(String.valueOf(serviceComputer.selectComputerCount(searched)));
 			request.setAttribute("nbComputers", nbComputers);
-			computersList= (request.getParameter("search")==null)?(serviceComputer.selectComputer(Integer.parseInt(nbComputersByPage), Integer.parseInt(currentPage)))
-					:(serviceComputer.selectComputerSearch(Integer.parseInt(nbComputersByPage), Integer.parseInt(currentPage),request.getParameter("search")));
+			computersList= (searched==null)?(serviceComputer.selectComputer(Integer.parseInt(nbComputersByPage), Integer.parseInt(currentPage)))
+					:(serviceComputer.selectComputerSearch(Integer.parseInt(nbComputersByPage), Integer.parseInt(currentPage),searched));
 			request.setAttribute("computersList", computersList);
-			int lastPage = Integer.parseInt(nbComputers)/Integer.parseInt(nbComputersByPage);
+			int resteDernierePage = Integer.parseInt(nbComputers)%Integer.parseInt(nbComputersByPage);
+			int lastPage =(resteDernierePage==0)? (Integer.parseInt(nbComputers)/Integer.parseInt(nbComputersByPage)):((Integer.parseInt(nbComputers)/Integer.parseInt(nbComputersByPage))+1);
 			request.setAttribute("pagination", getPagination(Integer.parseInt(currentPage),lastPage));
 			int firstArrow= ((Integer.parseInt(currentPage)-5)>=1)?(Integer.parseInt(currentPage)-5):1;
 			int secondArrow= ((Integer.parseInt(currentPage)+5)<=lastPage)?(Integer.parseInt(currentPage)+5):lastPage;
