@@ -34,7 +34,7 @@ public class MapperComputer {
   		if(!(dC.getIntroduced().equals("null"))) {
   			System.out.println(dC.getIntroduced()+" introducedMagic");
   			try {
-  			mC.setIntroduced(Timestamp.valueOf(dC.getIntroduced()));
+  			mC.setIntroduced(Timestamp.valueOf(dC.getIntroduced()+" 12:00:00"));
   			}catch(java.lang.IllegalArgumentException e) {
   				throw new PasLeBonFormatTimestamp();
   			}
@@ -44,17 +44,17 @@ public class MapperComputer {
   			System.out.println("nullIntroduced");
   			mC.setIntroduced(null);
   		}
-  		if(!dC.getDiscontinued().equals("null")) {
+  		if(!(dC.getDiscontinued().equals("null"))&&!(dC.getDiscontinued().trim().equals(""))) {
   			System.out.println(dC.getDiscontinued()+" DiscontinuededMagic");
   			try {
-  	  			mC.setDiscontinued(Timestamp.valueOf(dC.getDiscontinued()));
+  	  			mC.setDiscontinued(Timestamp.valueOf(dC.getDiscontinued()+" 12:00:00"));
   	  			}catch(java.lang.IllegalArgumentException e) {
   	  				throw new PasLeBonFormatTimestamp();
   	  			}
   			}
   		else {
   			System.out.println("nullDiscontinued");
-  			mC.setIntroduced(null);
+  			mC.setDiscontinued(null);
   		}
   		if(!dC.getCompanyId().equals("null")) {
   			try {

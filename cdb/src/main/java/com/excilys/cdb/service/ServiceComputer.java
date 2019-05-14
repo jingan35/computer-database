@@ -82,9 +82,6 @@ public class ServiceComputer {
   	
   	public void insertComputer(DtoComputer dtoComputer) throws PasLeBonFormatTimestamp, NotAIntegerException, TimestampDiscotinuedInferiorToTimestampIntroduced {
   		ModelComputer computerToAdd = MapperComputer.dtoComputerToModelComputer( dtoComputer);
-	  	if(computerToAdd.getDiscontinued().before(computerToAdd.getIntroduced())){
-			throw new TimestampDiscotinuedInferiorToTimestampIntroduced();
-		}
 	  	daoComputer.insert(computerToAdd);
   		
   		

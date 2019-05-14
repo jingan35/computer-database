@@ -84,15 +84,23 @@ public class DashboardServlet extends HttpServlet {
 			request.setAttribute("secondArrow", secondArrow);
 			
 			 ArrayList<Integer> availablePages = new ArrayList<Integer>();
-			 for (int i = Integer.parseInt(pageData.getCurrentPage()) - 2; i <= Integer.parseInt(pageData.getCurrentPage()) + 2; i++) {
-			 if (i > 0 && i <= pageData.getNbPages())
-				availablePages.add(i);
+			 if(Integer.parseInt(pageData.getCurrentPage())==(lastPage-1)||Integer.parseInt(pageData.getCurrentPage())==(lastPage)) {
+				 for (int i = pageData.getNbPages() - 4; i <= pageData.getNbPages(); i++) {
+					 if (i > 0 && i <= pageData.getNbPages())
+						availablePages.add(i);
+				 }
 			 }
-			 if(availablePages.size()==3 && lastPage>=4) {
-				 availablePages.add(4);
-			 }
-			 if(availablePages.size()==4 && lastPage>=5) {
-				 availablePages.add(5);
+			 else {
+				 for (int i = Integer.parseInt(pageData.getCurrentPage()) - 2; i <= Integer.parseInt(pageData.getCurrentPage()) + 2; i++) {
+					 if (i > 0 && i <= pageData.getNbPages())
+						availablePages.add(i);
+				 }
+				 if(availablePages.size()==3 && lastPage>=4) {
+					 availablePages.add(4);
+				 }
+				 if(availablePages.size()==4 && lastPage>=5) {
+					 availablePages.add(5);
+				 }
 			 }
 			 pageData.setAvailablePages(availablePages);
 			 request.setAttribute("availablePages", availablePages);

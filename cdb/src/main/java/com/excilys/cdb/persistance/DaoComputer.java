@@ -249,9 +249,11 @@ public class DaoComputer {
 		    preparedStatement.setTimestamp(3, model.getIntroduced());
 		    preparedStatement.setTimestamp(4, model.getDiscontinued());
 		    if(model.getCompanyId()==null) {
+		    	System.out.println("null");
 		    	preparedStatement.setObject(5, model.getCompanyId());
-		    }else
+		    }else {
 		    	preparedStatement.setInt(5, model.getCompanyId());
+		    }	    
 		    int statut = preparedStatement.executeUpdate();
 		    ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
 		    if(generatedKeys.next())
