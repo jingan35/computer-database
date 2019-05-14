@@ -100,28 +100,27 @@
 
     <footer class="navbar-fixed-bottom">
         <div class="container text-center">
-            <ul class="pagination">
+            <ul class="pagination" id="pagination">
                 <li>
                     <a href="?page=${firstArrow}&search=${search}" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                   </a>
               </li>
-              <li><a href="?page=${pagination-2}&search=${search}">${pagination-2 }</a></li>
-              <li><a href="?page=${pagination-1}&search=${search}">${pagination-1 }</a></li>
-              <li><a href="?page=${pagination}&search=${search}">${pagination }</a></li>
-              <li><a href="?page=${pagination+1}&search=${search}">${pagination+1 }</a></li>
-              <li><a href="?page=${pagination+2}&search=${search}">${pagination+2 }</a></li>
+              <c:forEach var="page" items="${availablePages}">
+				<li><a href="?page=${page}&search=${search}">${page}</a></li>
+			</c:forEach>
               <li>
                 <a href="?page=${secondArrow}&search=${search}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
         </ul>
-		</div>
-        <div class="btn-group btn-group-sm pull-right" role="group" >
-            <button type="button" class="btn btn-default">10</button>
-            <button type="button" class="btn btn-default">50</button>
-            <button type="button" class="btn btn-default">100</button>
+        
+		<ul class="pagination pull-right" role="group" >
+	            <li><a href="?page=1&size=10">10</a></li>
+	            <li><a href="?page=1&size=50">50</a></li>
+	            <li><a href="?page=1&size=100">100</a></li>
+		</ul>
         </div>
 
     </footer>

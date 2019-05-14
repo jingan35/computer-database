@@ -26,12 +26,13 @@ public class DaoCompany {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger logger = LoggerFactory.getLogger(DaoCompany.class);
+			logger.error(e.getMessage(), e);
 		}
 		
 		// load a properties file
 	    try {
-	    	new FileInputStream("config.properties");
+	    	input = getClass().getResourceAsStream("/config.properties");
 			prop.load(input);
 			url = prop.getProperty("url");
 			utilisateur= prop.getProperty("utilisateur");
@@ -55,10 +56,52 @@ public class DaoCompany {
 		ResultSet resultat =null;
 		try (Connection connexion = DriverManager.getConnection( url, utilisateur, motDePasse )){
 		    
-			String requete="SELECT * FROM company LIMIT ? OFFSET ?;";
+			String requete="SELECT id, name FROM company LIMIT ? OFFSET ?;";
 		    PreparedStatement preparedStatement=connexion.prepareStatement(requete);
 		    preparedStatement.setInt(1, nbRowByPage);
 		    preparedStatement.setInt(2, nbRowByPage*(page-1));
+		    /* requête BDD */
+		    resultat = preparedStatement.executeQuery( );
+		    
+		    if ( resultat.next() ) {
+			    int id = resultat.getInt( "id" );
+			    String name = resultat.getString( "name" );
+			    //creer le modelComputer et ajout dans la liste
+			    companyList.add(new ModelCompany(id,name));
+			}
+		    
+		    else {
+		    	throw new BaseVide();
+		    }
+		    
+			/* Récupération des données du résultat de la requête de lecture */
+			while ( resultat.next() ) {
+			    int id = resultat.getInt( "id" );
+			    String name = resultat.getString( "name" );
+			    //creer le modelComputer et ajout dans la liste
+			    companyList.add( new ModelCompany(id,name));
+			}
+
+		} catch ( SQLException e ) {
+		    /* Gérer les éventuelles erreurs ici */
+			Logger logger = LoggerFactory.getLogger(DaoCompany.class);
+			logger.error(e.getMessage(), e);
+		} 
+		/* Exécution d'une requête de lecture */
+		
+		
+		return companyList;
+	}
+	
+	public ArrayList<ModelCompany> selectAll() throws BaseVide {
+		// TODO Auto-generated method stub
+		ArrayList<ModelCompany> companyList = new ArrayList<ModelCompany>();
+		ResultSet resultat =null;
+		try (Connection connexion = DriverManager.getConnection( url, utilisateur, motDePasse )){
+		    
+			String requete="SELECT id, name FROM company;";
+		    PreparedStatement preparedStatement=connexion.prepareStatement(requete);
+		    
 		    /* requête BDD */
 		    resultat = preparedStatement.executeQuery( );
 		    

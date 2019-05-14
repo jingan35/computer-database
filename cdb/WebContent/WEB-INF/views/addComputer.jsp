@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import ="java.util.ArrayList" %>
+<%@ page import ="com.excilys.cdb.mapper.DtoCompany"%>
 <!DOCTYPE html>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
 <title>Computer Database</title>
@@ -13,9 +16,11 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="dashboard.html"> Application - Computer Database </a>
+            <a class="navbar-brand" href="dashboard"> Application - Computer Database </a>
         </div>
     </header>
+
+	<%ArrayList<DtoCompany> companiesList = (ArrayList<DtoCompany>)request.getAttribute("companiesList"); %>
 
     <section id="main">
         <div class="container">
@@ -36,10 +41,14 @@
                                 <label for="discontinued">Discontinued date</label>
                                 <input type="date" class="form-control" id="discontinued" placeholder="Discontinued date">
                             </div>
+                            
                             <div class="form-group">
                                 <label for="companyId">Company</label>
                                 <select class="form-control" id="companyId" >
                                     <option value="0">--</option>
+                                    	<c:forEach items="${companiesList}" var="company">
+                                			<option value="${company.getId()}">${company.getName()}</option>
+                						</c:forEach>
                                 </select>
                             </div>                  
                         </fieldset>

@@ -27,7 +27,7 @@ public class DaoComputer {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
-			Logger logger = LoggerFactory.getLogger(DaoCompany.class);
+			Logger logger = LoggerFactory.getLogger(DaoComputer.class);
 			logger.error(e.getMessage(), e);
 		}
 		

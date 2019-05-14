@@ -32,5 +32,17 @@ public class ServiceCompany {
 				return resultList;
 				
 			}
+			
+			public ArrayList<DtoCompany> selectAllCompanies() throws BaseVide{
+				
+		  		//le liste renvoyée
+		  		ArrayList<DtoCompany> resultList = new ArrayList<DtoCompany>();
+		  		ArrayList<ModelCompany> list= dC.selectAll();
+		  		for(int i=0;i<list.size();i++) {
+		  			resultList.add(MapperCompany.modelCompanyToDtoCompany(list.get(i)));
+		  		}
+				return resultList;
+				
+			}
 	
 }
