@@ -16,10 +16,7 @@ import com.excilys.cdb.ui.UI;
 public class DaoCompany {
 	Connection connexion;
 	/* Création de l'objet gérant les requêtes */
-	Statement statement;
-	Properties prop = new Properties();
-    InputStream input = null;
-    String url, utilisateur, motDePasse;
+	DAOFactory daoFactory= DAOFactory.getInstance();
 	
 	private DaoCompany(){
 		try {
@@ -31,16 +28,6 @@ public class DaoCompany {
 		}
 		
 		// load a properties file
-	    try {
-	    	input = getClass().getResourceAsStream("/config.properties");
-			prop.load(input);
-			url = prop.getProperty("url");
-			utilisateur= prop.getProperty("utilisateur");
-			motDePasse= prop.getProperty("motDePasse");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 	}
 	private static DaoCompany INSTANCE=new DaoCompany();
@@ -54,7 +41,7 @@ public class DaoCompany {
 		// TODO Auto-generated method stub
 		ArrayList<ModelCompany> companyList = new ArrayList<ModelCompany>();
 		ResultSet resultat =null;
-		try (Connection connexion = DriverManager.getConnection( url, utilisateur, motDePasse )){
+		try (Connection connexion = daoFactory.getConnection()){
 		    
 			String requete="SELECT id, name FROM company LIMIT ? OFFSET ?;";
 		    PreparedStatement preparedStatement=connexion.prepareStatement(requete);
@@ -97,7 +84,7 @@ public class DaoCompany {
 		// TODO Auto-generated method stub
 		ArrayList<ModelCompany> companyList = new ArrayList<ModelCompany>();
 		ResultSet resultat =null;
-		try (Connection connexion = DriverManager.getConnection( url, utilisateur, motDePasse )){
+		try (Connection connexion = daoFactory.getConnection()){
 		    
 			String requete="SELECT id, name FROM company;";
 		    PreparedStatement preparedStatement=connexion.prepareStatement(requete);

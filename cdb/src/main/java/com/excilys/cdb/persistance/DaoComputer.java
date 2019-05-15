@@ -17,10 +17,7 @@ import com.excilys.cdb.model.*;
 
 public class DaoComputer {
 	
-	Properties prop = new Properties();
-    InputStream input = null;
-    String url, utilisateur, motDePasse;
-
+	
 	
 	private DaoComputer(){
 		try {
@@ -33,20 +30,11 @@ public class DaoComputer {
 		
 		
 		// load a properties file
-	    try {
-	    	input = getClass().getResourceAsStream("/config.properties");
-			prop.load(input);
-			url = prop.getProperty("url");
-			utilisateur= prop.getProperty("utilisateur");
-			motDePasse= prop.getProperty("motDePasse");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 		
 	}
 	private static DaoComputer INSTANCE=new DaoComputer();
+	DAOFactory daoFactory= DAOFactory.getInstance();
 	
 	public static DaoComputer getInstance() {
 		return INSTANCE;
@@ -55,7 +43,7 @@ public class DaoComputer {
 	public ArrayList<ModelComputer> select(int nbRowByPage,int page,String search) throws BaseVide {
 		ArrayList<ModelComputer> computerList = new ArrayList<ModelComputer>();
 		ResultSet resultat =null;
-		try (Connection connexion=DriverManager.getConnection( url, utilisateur, motDePasse )){
+		try (Connection connexion=daoFactory.getConnection()){
 			String requete="SELECT id , name , introduced , discontinued , company_id FROM computer LIMIT ? OFFSET ?;";
 			
 			 String detailsRequest= (search==null)?("SELECT computer.id,computer.name,introduced,discontinued,company.name AS company_name,company.id "
@@ -121,7 +109,7 @@ public class DaoComputer {
 		ArrayList<ModelComputer> computerList = new ArrayList<ModelComputer>();
 		ResultSet resultat =null;
 		int computerCount=0;
-		try (Connection connexion=DriverManager.getConnection( url, utilisateur, motDePasse )){
+		try (Connection connexion=daoFactory.getConnection()){
 			String requete=(search==null)?"SELECT COUNT(id) AS idCount FROM computer ;":("SELECT COUNT(computer.id) AS idCount "
 		    		+ "FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name LIKE '%"+search+"%';");
 		    PreparedStatement preparedStatement=connexion.prepareStatement(requete);
@@ -155,7 +143,7 @@ public class DaoComputer {
 		//Connection connexion=null;
 		ModelComputer mC = null;
 		ResultSet resultat =null;
-		try (Connection connexion = DriverManager.getConnection( url, utilisateur, motDePasse )){
+		try (Connection connexion = daoFactory.getConnection()){
 		    String detailsRequest="SELECT computer.id,computer.name,introduced,discontinued,company.name AS company_name,company.id "
 		    		+ "FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.id=?;";
 		    PreparedStatement preparedStatement=connexion.prepareStatement(detailsRequest);
@@ -199,7 +187,7 @@ public class DaoComputer {
 		// TODO Auto-generated method stub
 		ResultSet resultat =null;
 		int idUpdated=0;
-		try (Connection connexion = DriverManager.getConnection( url, utilisateur, motDePasse )){
+		try (Connection connexion = daoFactory.getConnection()){
 			/* requête BDD */
 		    String updateSql= " UPDATE computer SET id = ?, name = ?, introduced = ?, discontinued = ?, company_id=? WHERE id=?;";
 		    PreparedStatement preparedStatement=connexion.prepareStatement(updateSql,Statement.RETURN_GENERATED_KEYS);
@@ -238,7 +226,7 @@ public class DaoComputer {
 		// TODO Auto-generated method stub
 		ResultSet resultat =null;
 		int idAdded=0;
-		try(Connection connexion = DriverManager.getConnection( url, utilisateur, motDePasse )) {
+		try(Connection connexion = daoFactory.getConnection()) {
 		    
 		    /* requête BDD */
 			
@@ -278,7 +266,7 @@ public class DaoComputer {
 	public void delete(int id) {
 		// TODO Auto-generated method stub
 				ResultSet resultat =null;
-				try (Connection connexion = DriverManager.getConnection( url, utilisateur, motDePasse )){
+				try (Connection connexion = daoFactory.getConnection()){
 				    
 				    String deleteRequest ="DELETE FROM computer WHERE id=?;";
 				    PreparedStatement preparedStatement=connexion.prepareStatement(deleteRequest);
