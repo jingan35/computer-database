@@ -89,7 +89,7 @@ public class ServiceComputer {
   	
   	public void updateComputer(DtoComputer dtoComputer) throws PasLeBonFormatTimestamp, NotAIntegerException, TimestampDiscotinuedInferiorToTimestampIntroduced {
   		ModelComputer computerToUpdate = MapperComputer.dtoComputerToModelComputer( dtoComputer);
-  		if(computerToUpdate.getDiscontinued().before(computerToUpdate.getIntroduced())){
+  		if(computerToUpdate.getDiscontinued()!=null && computerToUpdate.getDiscontinued().before(computerToUpdate.getIntroduced())){
 			throw new TimestampDiscotinuedInferiorToTimestampIntroduced();
 		}
   		daoComputer.update(computerToUpdate.getId(), computerToUpdate);

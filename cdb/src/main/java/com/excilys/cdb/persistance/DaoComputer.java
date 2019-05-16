@@ -154,7 +154,7 @@ public class DaoComputer {
 			if(resultat.next()) {
 				int Id = resultat.getInt( "computer.id" );
 				String name = resultat.getString( "computer.name" );
-				Integer cId = (Integer)(resultat.getObject( "company.id" ));
+				Integer cId = (Integer)(resultat.getInt( "company.id" ));
 				Timestamp introduced = resultat.getTimestamp( "introduced" );
 				Timestamp discontinued = resultat.getTimestamp( "discontinued" );
 				String companyName = resultat.getString( "company_name" );

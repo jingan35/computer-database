@@ -36,12 +36,12 @@
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
                                 <input type="date" name="introduced" class="form-control" id="introduced" placeholder="Introduced date" 
-                                required pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" min="1700-01-01" max="3500-12-31">
+                                pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" min="1970-01-01" max="3500-12-31">
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
                                 <input type="date" name="discontinued" class="form-control" id="discontinued" placeholder="Discontinued date"
-                               	pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" min="1700-01-01" max="3501-01-01">
+                               	pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" min="1970-01-01" max="3501-01-01">
                             </div>
                             
                             <div class="form-group">

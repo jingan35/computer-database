@@ -1,7 +1,5 @@
 package com.excilys.cdb.mapper;
 
-import java.sql.Timestamp;
-
 public class DtoComputer {
 	private String id;
 	private String name;
@@ -51,6 +49,16 @@ public class DtoComputer {
 		return discontinued;
 	}
 
+	public String getDateIntroduced() {
+		// TODO Auto-generated method stub
+		return introduced;
+	}
+
+	public String getDateDiscontinued() {
+		// TODO Auto-generated method stub
+		return discontinued;
+	}
+	
 	public String getCompanyId() {
 		// TODO Auto-generated method stub
 		return company_id;

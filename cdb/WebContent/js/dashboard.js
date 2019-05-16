@@ -93,14 +93,4 @@ $(document).keydown(function(e) {
 
 
 
-//Pagination
-$(function() {
-	let url = new URL(window.location.href);
-	let searchParams = new URLSearchParams(url.search);
-	var search = searchParams.get('search');
-	var page = searchParams.get('page');
-	
-	var activePage = parseInt(page);
-	
-	
-});
+
