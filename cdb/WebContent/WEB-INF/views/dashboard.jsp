@@ -11,6 +11,8 @@
 <link href="${pageContext.request.contextPath }/css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link href="${pageContext.request.contextPath }/css/font-awesome.css" rel="stylesheet" media="screen">
 <link href="${pageContext.request.contextPath }/css/main.css" rel="stylesheet" media="screen">
+<link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' 
+integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
 </head>
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
@@ -60,18 +62,18 @@
                             </span>
                         </th>
                         <th>
-                            Computer name
+                            Computer name <a class='fas fa-sort-alpha-down' /> <a class="fas fa-sort-alpha-up" />
                         </th>
                         <th>
-                            Introduced date
+                            Introduced date <a class='fas fa-sort-alpha-down' /> <a class="fas fa-sort-alpha-up" />
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
-                            Discontinued date
+                            Discontinued date <a class='fas fa-sort-alpha-down' /> <a class="fas fa-sort-alpha-up" />
                         </th>
                         <!-- Table header for Company -->
                         <th>
-                            Company
+                            Company <a class='fas fa-sort-alpha-down' /> <a class="fas fa-sort-alpha-up" />
                         </th>
 
                     </tr>
