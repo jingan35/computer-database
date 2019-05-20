@@ -9,6 +9,7 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.cdb.WebUiObject.Page;
 import com.excilys.cdb.exception.BaseVide;
 import com.excilys.cdb.exception.RequeteSansResultatException;
 import com.excilys.cdb.exception.TimestampDiscotinuedInferiorToTimestampIntroduced;
@@ -40,19 +41,44 @@ public class DaoComputer {
 		return INSTANCE;
 	}
 	
-	public ArrayList<ModelComputer> select(int nbRowByPage,int page,String search) throws BaseVide {
+	public ArrayList<ModelComputer> select(Page page) throws BaseVide {
 		ArrayList<ModelComputer> computerList = new ArrayList<ModelComputer>();
 		ResultSet resultat =null;
 		try (Connection connexion=daoFactory.getConnection()){
-			String requete="SELECT id , name , introduced , discontinued , company_id FROM computer LIMIT ? OFFSET ?;";
+			String requete="SELECT computer.id,computer.name,introduced,discontinued,company.name AS company_name,company.id "
+		    		+ "FROM computer LEFT JOIN company ON computer.company_id = company.id ";
 			
-			 String detailsRequest= (search==null)?("SELECT computer.id,computer.name,introduced,discontinued,company.name AS company_name,company.id "
+			String searchRequestPart = "WHERE computer.name LIKE '%"+page.getSearched()+"%' ";
+			
+			String OrderByRequestPart = "ORDER BY ? ? ";
+			
+			String paginationRequestPage = "LIMIT ? OFFSET ?;";
+			
+			String detailsRequest= (page.getSearched()==null)?("SELECT computer.id,computer.name,introduced,discontinued,company.name AS company_name,company.id "
 			    		+ "FROM computer LEFT JOIN company ON computer.company_id = company.id LIMIT ? OFFSET ?;"):("SELECT computer.id,computer.name,introduced,discontinued,company.name AS company_name,company.id "
-					    		+ "FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name LIKE '%"+search+"%' LIMIT ? OFFSET ?;");
+					    		+ "FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name LIKE '%"+page.getSearched()+"%' LIMIT ? OFFSET ?;");
+			    		
+			detailsRequest = requete;
+			if(page.getSearched()!=null)
+				detailsRequest+=searchRequestPart;
+			if(page.getIsOrdered()!=false)
+				detailsRequest+=OrderByRequestPart;
+			detailsRequest+=paginationRequestPage;
+			System.out.println(detailsRequest);
+			
 			 
-		    PreparedStatement preparedStatement=connexion.prepareStatement(detailsRequest);
-		    preparedStatement.setInt(1, nbRowByPage);
-		    preparedStatement.setInt(2, nbRowByPage*(page-1));
+			PreparedStatement preparedStatement=connexion.prepareStatement(detailsRequest);
+			if(page.getIsOrdered()==false) {    		
+		    
+			    preparedStatement.setInt(1, Integer.parseInt(page.getNbComputersByPage()));
+			    preparedStatement.setInt(2, Integer.parseInt(page.getNbComputersByPage())*(Integer.parseInt(page.getCurrentPage())-1));
+			}
+			else {
+				preparedStatement.setString(1,page.getOrderBy().getName());
+				preparedStatement.setString(2,page.getOrderBy().getType());
+				preparedStatement.setInt(3, Integer.parseInt(page.getNbComputersByPage()));
+			    preparedStatement.setInt(4, Integer.parseInt(page.getNbComputersByPage())*(Integer.parseInt(page.getCurrentPage())-1));
+			}
 		    /* requête BDD */
 		    resultat = preparedStatement.executeQuery( );
 		    ModelComputer currentComputer=null;
@@ -104,6 +130,8 @@ public class DaoComputer {
 		return computerList;
 		
 	}
+	
+	
 	
 	public int selectCount(String search) throws BaseVide {
 		ArrayList<ModelComputer> computerList = new ArrayList<ModelComputer>();

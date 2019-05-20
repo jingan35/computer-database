@@ -3,6 +3,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
+import com.excilys.cdb.WebUiObject.Page;
 import com.excilys.cdb.exception.BaseVide;
 import com.excilys.cdb.exception.NotAIntegerException;
 import com.excilys.cdb.exception.PasDePagesNegException;
@@ -32,12 +33,12 @@ public class ServiceComputer {
 	
  
   	
-  	public ArrayList<DtoComputer> selectComputer(int nbRowByPage,int page) throws BaseVide, PasDePagesNegException{
+  	public ArrayList<DtoComputer> selectComputer(Page page) throws BaseVide, PasDePagesNegException{
   		
   		//le liste renvoyée
   		ArrayList<DtoComputer> resultList = new ArrayList<DtoComputer>();
-  		ArrayList<ModelComputer> list= daoComputer.select(nbRowByPage,page,null);
-  		if(page<=0)
+  		ArrayList<ModelComputer> list= daoComputer.select(page);
+  		if(Integer.parseInt(page.getCurrentPage())<=0)
   			throw new PasDePagesNegException();
   		Stream<ModelComputer> streamModelComputerList= list.stream();
   		streamModelComputerList.forEach(element ->{
@@ -52,12 +53,12 @@ public class ServiceComputer {
   		
   	}
   	
-  	public ArrayList<DtoComputer> selectComputerSearch(int nbRowByPage,int page, String search) throws BaseVide, PasDePagesNegException{
+  	public ArrayList<DtoComputer> selectComputerSearch(Page page) throws BaseVide, PasDePagesNegException{
   		
   		//le liste renvoyée
   		ArrayList<DtoComputer> resultList = new ArrayList<DtoComputer>();
-  		ArrayList<ModelComputer> list= daoComputer.select(nbRowByPage,page,search);
-  		if(page<=0)
+  		ArrayList<ModelComputer> list= daoComputer.select(page);
+  		if(Integer.parseInt(page.getCurrentPage())<=0)
   			throw new PasDePagesNegException();
   		Stream<ModelComputer> streamModelComputerList= list.stream();
   		streamModelComputerList.forEach(element ->{

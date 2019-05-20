@@ -62,18 +62,22 @@ integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zF
                             </span>
                         </th>
                         <th>
-                            Computer name <a class='fas fa-sort-alpha-down' /> <a class="fas fa-sort-alpha-up" />
+                            Computer name <a class='fas fa-sort-alpha-down' href="?orderBy=computer&search=${search}"/></a> 
+                            <a class="fas fa-sort-alpha-up" href="?orderBy=computerDesc&search=${search}" ></a>
                         </th>
                         <th>
-                            Introduced date <a class='fas fa-sort-alpha-down' /> <a class="fas fa-sort-alpha-up" />
+                            Introduced date  <a class='fas fa-sort-alpha-down' href="?orderBy=introduced&search=${search}"/></a> 
+                            <a class="fas fa-sort-alpha-up" href="?orderBy=introducedDesc&search=${search}"></a>
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
-                            Discontinued date <a class='fas fa-sort-alpha-down' /> <a class="fas fa-sort-alpha-up" />
+                            Discontinued date <a class='fas fa-sort-alpha-down' href="?orderBy=discontinued&search=${search}"/></a> 
+                            <a class="fas fa-sort-alpha-up" href="?orderBy=discontinuedDesc&search=${search}" ></a>
                         </th>
                         <!-- Table header for Company -->
                         <th>
-                            Company <a class='fas fa-sort-alpha-down' /> <a class="fas fa-sort-alpha-up" />
+                            Company <a class='fas fa-sort-alpha-down' href="?orderBy=company&search=${search}"/></a> 
+                            <a class="fas fa-sort-alpha-up" href="?orderBy=companyDesc&search=${search}"></a>
                         </th>
 
                     </tr>
@@ -104,24 +108,24 @@ integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zF
         <div class="container text-center">
             <ul class="pagination" id="pagination">
                 <li>
-                    <a href="?page=${firstArrow}&search=${search}" aria-label="Previous">
+                    <a href="?page=${firstArrow}&search=${search}&orderBy=${orderBy}" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                   </a>
               </li>
               <c:forEach var="page" items="${availablePages}">
-				<li><a href="?page=${page}&search=${search}">${page}</a></li>
+				<li><a href="?page=${page}&search=${search}&orderBy=${orderBy}">${page}</a></li>
 			</c:forEach>
               <li>
-                <a href="?page=${secondArrow}&search=${search}" aria-label="Next">
+                <a href="?page=${secondArrow}&search=${search}&orderBy=${orderBy}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
         </ul>
         
 		<ul class="pagination pull-right" role="group" >
-	            <li><a href="?page=1&size=10">10</a></li>
-	            <li><a href="?page=1&size=50">50</a></li>
-	            <li><a href="?page=1&size=100">100</a></li>
+	            <li><a href="?page=1&size=10&orderBy=${orderBy}">10</a></li>
+	            <li><a href="?page=1&size=50&orderBy=${orderBy}">50</a></li>
+	            <li><a href="?page=1&size=100&orderBy=${orderBy}">100</a></li>
 		</ul>
         </div>
 

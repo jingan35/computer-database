@@ -2,6 +2,7 @@ package com.excilys.cdb.controller;
 
 import java.util.ArrayList;
 
+import com.excilys.cdb.WebUiObject.Page;
 import com.excilys.cdb.exception.*;
 import com.excilys.cdb.mapper.DtoCompany;
 import com.excilys.cdb.mapper.DtoComputer;
@@ -17,6 +18,7 @@ public class Controller {
     private static Controller INSTANCE = new Controller();
     ServiceComputer sComputer= ServiceComputer.getInstance();
     ServiceCompany sCompany= ServiceCompany.getInstance();
+    Page pageData = Page.getInstance();
      
     /** Point d'accès pour l'instance unique du singleton */
     public static Controller getInstance()
@@ -134,7 +136,7 @@ public class Controller {
     }
     
     String computerList(int nbRowByPage,int page) throws BaseVide, PasDePagesNegException {
-    	ArrayList<DtoComputer> computerList=sComputer.selectComputer(nbRowByPage,page);
+    	ArrayList<DtoComputer> computerList=sComputer.selectComputer(pageData);
     	String result="";
     	for(int i=0;i<computerList.size();i++) {
     		result+="id : "+computerList.get(i).getId()+" name : "+computerList.get(i).getName() +"\n";

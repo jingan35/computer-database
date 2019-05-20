@@ -8,6 +8,8 @@ public class Page {
 	private String nbComputersByPage="10";
 	private String nbComputers="0";
 	private String searched=null;
+	private OrderByEnum orderBy = null;
+	private boolean isOrdered = false;
 	
 	 ArrayList<Integer> availablePages = new ArrayList<Integer>();
 	
@@ -23,6 +25,11 @@ public class Page {
 		
 		return lastPage;
 	}
+
+	public OrderByEnum getOrderBy() {
+		return orderBy;
+	}
+	
 	
 	public static Page getInstance(){
 		return INSTANCE;
@@ -48,6 +55,14 @@ public class Page {
 		return this.availablePages;
 	}
 	
+	public boolean getIsOrdered() {
+		return isOrdered;
+	}
+	
+	public void setOrderBy(OrderByEnum orderBy) {
+		this.orderBy=orderBy;
+	}
+	
 	public void setCurrentPage(String currentPage) {
 		this.currentPage=currentPage;
 	}
@@ -65,5 +80,9 @@ public class Page {
 	}
 	public void setAvailablePages(ArrayList<Integer> availablePages){
 		this.availablePages=availablePages;
+	}
+	
+	public void setIsOrdered(boolean isOrdered) {
+		this.isOrdered=isOrdered;
 	}
 }
