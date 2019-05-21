@@ -88,7 +88,7 @@ integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zF
                 	<c:forEach items="${computersList}" var="computer">
                 		<tr>
                         <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
+                            <input type="checkbox" name="cb" class="cb" value="${computer.id}">
                         </td>
                         <td>
                             <a href="editComputer?id=${computer.id}" onclick=""><c:out value="${computer.name}" /></a>

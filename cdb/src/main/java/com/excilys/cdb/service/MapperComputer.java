@@ -31,7 +31,7 @@ public class MapperComputer {
 				throw new NotAIntegerException();
 		}
   		mC.setName(dC.getName());
-  		if(!(dC.getIntroduced().equals("null"))) {
+  		if(!(dC.getIntroduced().equals("null"))&&!(dC.getIntroduced().equals(""))) {
   			System.out.println(dC.getIntroduced()+" introducedMagic");
   			try {
   			mC.setIntroduced(Timestamp.valueOf(dC.getIntroduced()+" 12:00:00"));

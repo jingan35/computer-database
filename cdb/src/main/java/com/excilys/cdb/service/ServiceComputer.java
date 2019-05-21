@@ -100,6 +100,14 @@ public class ServiceComputer {
   		daoComputer.delete(id);
   	}
   	
+  	public void deleteComputer(String Ids) {
+  		String[] tabIds= Ids.split(",");
+  		for(int i=0;i<tabIds.length;i++) {
+  			deleteComputer(Integer.parseInt(tabIds[i]));
+  		}
+  		
+  	}
+  	
   	public int selectComputerCount(String search) throws BaseVide, PasDePagesNegException{
   		
   		return daoComputer.selectCount(search);

@@ -14,21 +14,21 @@ import com.excilys.cdb.mapper.DtoCompany;
 import com.excilys.cdb.mapper.DtoComputer;
 import com.excilys.cdb.ui.UI;
 
-
 public class Validator {
 
-	protected Logger logger=LoggerFactory.getLogger(Validator.class);
-	
-	private Validator() {}
-	
-	private static Validator INSTANCE = new Validator(); 
-	
+	protected Logger logger = LoggerFactory.getLogger(Validator.class);
+
+	private Validator() {
+	}
+
+	private static Validator INSTANCE = new Validator();
+
 	public static Validator getInstance() {
 		return INSTANCE;
 	}
-	
+
 	private void validateId(String id) throws NotAIntegerException {
-		if(!id.equals("null")) {
+		if (!id.equals("null")) {
 			try {
 				int localId = Integer.parseInt(id);
 				if (localId < 0)
@@ -38,17 +38,17 @@ public class Validator {
 			}
 		}
 	}
-	
+
 	private void required(String name, String element) throws RequiredElementException {
-		if (element == null||element.trim().equals("")) {
+		if (element == null || element.trim().equals("")) {
 			throw new RequiredElementException(name);
 		}
 	}
-	
-	private void validateDate(String date) throws InvalidDateValueException{
+
+	private void validateDate(String date) throws InvalidDateValueException {
 		if (date != null) {
 			try {
-				Timestamp.valueOf(date+" 12:00:00");
+				Timestamp.valueOf(date + " 12:00:00");
 			} catch (Exception e) {
 				RuntimeException exception = new InvalidDateValueException(date);
 				this.logger.error(exception.getMessage());
@@ -56,42 +56,52 @@ public class Validator {
 			}
 		}
 	}
-	
+
 	private void validateDateOrder(String before, String after) throws InvalidDateOrderException {
 		if (before != null && after != null) {
-			if (Timestamp.valueOf(before+" 12:00:00").after(Timestamp.valueOf(after+" 12:00:00"))) {
+			if (Timestamp.valueOf(before + " 12:00:00").after(Timestamp.valueOf(after + " 12:00:00"))) {
 				InvalidDateOrderException exception = new InvalidDateOrderException(before, after);
 				this.logger.error(exception.getMessage());
 				throw exception;
-				
+
 			}
 		}
 	}
-	
+
 	public void validateCompanyDto(DtoCompany companyDto) throws NotAIntegerException, RequiredElementException {
 		this.validateId(companyDto.getId());
 		this.required("name", companyDto.getName());
 	}
-	
-	public void validateComputerDto(DtoComputer computerDto) throws NotAIntegerException, RequiredElementException, InvalidDateOrderException {
+
+	public void validateComputerDto(DtoComputer computerDto)
+			throws NotAIntegerException, RequiredElementException, InvalidDateOrderException {
 		this.validateId(computerDto.getId());
 		this.required("name", computerDto.getName());
-		this.validateDate(computerDto.getIntroduced());
-		if((!computerDto.getDiscontinued().equals(""))) {
+		if ((!computerDto.getIntroduced().equals(""))) {
+			this.validateDate(computerDto.getIntroduced());
+		}
+		if ((!computerDto.getDiscontinued().equals(""))) {
 			this.validateDate(computerDto.getDiscontinued());
 			this.validateDateOrder(computerDto.getIntroduced(), computerDto.getDiscontinued());
 		}
 		this.validateId(computerDto.getCompanyId());
 	}
-	
-	public void validatePagination(String paginationValue) throws NotAIntegerException {
+
+	public void validatePagination(String paginationValue) throws NotAIntegerException, PageNumberLessThan1Exception {
+		int localId;
 		try {
-			int localId = Integer.parseInt(paginationValue);
-			if (localId <= 0)
-				throw new PageNumberLessThan1Exception(localId);
-		} catch (Exception e) {
+			localId = Integer.parseInt(paginationValue);
+		}
+		catch (NumberFormatException e) {
 			throw new NotAIntegerException();
 		}
-}
+		if (localId <= 0)
+			throw new PageNumberLessThan1Exception(localId);
+		
+	}
 	
+	public void idsToDelete(String Ids) {
+		String[] tabIds = Ids.split(",");
+	}
+
 }
