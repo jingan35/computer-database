@@ -36,7 +36,8 @@ public class UI {
     				+ "\nUpdate a Computer info : uc; id ;AttributeToModify ; NewValue; AttributeToModify2; NewValue2;etc.. "
     				+ "\nDelete a Computer : dc; id "
     				+ "\nShow a computer Details: sc;id "
-    				+ "\nAdd a computer: ac; id; name; introducedTimestamp('n' if null); discontinuedTimestamp('n' if null); company_id "); 
+    				+ "\nAdd a computer: ac; id; name; introducedTimestamp('n' if null); discontinuedTimestamp('n' if null); company_id "
+    				+"\nEffacer une compagnie: dcompany;id"); 
     		System.out.println("Quel est vôtre requête ? ");
     		
     		try {

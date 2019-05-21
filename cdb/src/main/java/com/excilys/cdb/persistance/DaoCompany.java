@@ -16,6 +16,8 @@ import com.excilys.cdb.ui.UI;
 public class DaoCompany {
 	Connection connexion;
 	/* Création de l'objet gérant les requêtes */
+	
+	
 	DAOFactory daoFactory= DAOFactory.getInstance();
 	
 	private DaoCompany(){
@@ -120,6 +122,25 @@ public class DaoCompany {
 		
 		
 		return companyList;
+	}
+	
+	public void delete(int id) {
+		try (Connection connexion = daoFactory.getConnection()){
+			connexion.setAutoCommit(false);
+			String requestComputer="DELETE FROM computer WHERE company_id=? ;";
+			PreparedStatement preparedStatement1=connexion.prepareStatement(requestComputer);
+			preparedStatement1.setInt(1, id);
+			preparedStatement1.executeUpdate();
+			String requestCompany="DELETE FROM company WHERE id=? ;";
+			PreparedStatement preparedStatement2=connexion.prepareStatement(requestCompany);
+			preparedStatement2.setInt(1, id);
+			preparedStatement2.executeUpdate();
+			connexion.commit();
+			connexion.setAutoCommit(true);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

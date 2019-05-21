@@ -19,9 +19,9 @@ public class DtoComputer {
 	public DtoComputer(String id, String name,String introduced, String discontinued,String company_id){
 		this.id= id;
 		this.name=name;
-		this.introduced=introduced;
-		this.discontinued=discontinued;
-		this.company_id=company_id;
+		this.introduced=introduced.equals("")?null:introduced;
+		this.discontinued=discontinued.equals("")?null:discontinued;
+		this.company_id=company_id.equals("")?null:company_id;
 	}
 	
 	public String getId() {

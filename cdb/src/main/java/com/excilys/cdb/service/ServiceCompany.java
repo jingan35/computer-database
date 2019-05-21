@@ -44,5 +44,9 @@ public class ServiceCompany {
 				return resultList;
 				
 			}
+			
+			public void deleteCompanyEtc(int id) {
+				dC.delete(id);
+			}
 	
 }

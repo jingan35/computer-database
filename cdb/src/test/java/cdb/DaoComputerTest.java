@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.excilys.cdb.WebUiObject.Page;
 import com.excilys.cdb.exception.BaseVide;
 import com.excilys.cdb.exception.RequeteSansResultatException;
 import com.excilys.cdb.model.ModelComputer;
@@ -15,11 +16,13 @@ import com.excilys.cdb.persistance.DaoComputer;
 
 public class DaoComputerTest {
 	DaoComputer daoComp;
+	Page page;
 
 	@Before
 	public void setUp() throws Exception {
 		UTDatabase.getInstance().reload();
 		daoComp = DaoComputer.getInstance();
+		page=Page.getInstance();
 
 	}
 
@@ -27,8 +30,8 @@ public class DaoComputerTest {
 	public void selectTest() throws BaseVide {
 
 		ArrayList<ModelComputer> listResultatObtenu;
-
-		listResultatObtenu = daoComp.select(2, 1, null);
+		
+		listResultatObtenu = daoComp.select(page);
 		int tailleObtenu = listResultatObtenu.size();
 		int tailleSouhaite = 2;
 		assertEquals("test taille de liste d'ordis", tailleSouhaite, tailleObtenu);

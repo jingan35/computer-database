@@ -181,7 +181,6 @@ public class DashboardServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		System.out.println(request.getParameter("selection"));
 		serviceComputer.deleteComputer(request.getParameter("selection"));
 		doGet(request, response);
 	}

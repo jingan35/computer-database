@@ -73,6 +73,16 @@ public class Controller {
     			}
     			//fonction pour sppr
     		}
+    		else if(cmdTab[0].equalsIgnoreCase("dcompany")){
+    			int id=-1;
+    			try {
+    				id=Integer.parseInt(cmdTab[1]);
+    				delete_company(id);
+    			}catch( NumberFormatException e) {
+    				throw new NotIntExpectedException();
+    			}
+    			//fonction pour sppr
+    		}
     		else {
     			throw new NotACommandException();
     		}
@@ -135,7 +145,12 @@ public class Controller {
     	}
     }
     
-    String computerList(int nbRowByPage,int page) throws BaseVide, PasDePagesNegException {
+    private void delete_company(int id) {
+		sCompany.deleteCompanyEtc(id);
+		
+	}
+
+	String computerList(int nbRowByPage,int page) throws BaseVide, PasDePagesNegException {
     	ArrayList<DtoComputer> computerList=sComputer.selectComputer(pageData);
     	String result="";
     	for(int i=0;i<computerList.size();i++) {
