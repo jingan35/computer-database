@@ -50,7 +50,7 @@ public class DaoComputer {
 			
 			String searchRequestPart = "WHERE computer.name LIKE '%"+page.getSearched()+"%' ";
 			
-			String OrderByRequestPart = "ORDER BY ? ? ";
+			String OrderByRequestPart = "ORDER BY %s ";
 			
 			String paginationRequestPage = "LIMIT ? OFFSET ?;";
 			
@@ -67,18 +67,17 @@ public class DaoComputer {
 			System.out.println(detailsRequest);
 			
 			 
-			PreparedStatement preparedStatement=connexion.prepareStatement(detailsRequest);
-			if(page.getIsOrdered()==false) {    		
+			
+			
 		    
-			    preparedStatement.setInt(1, Integer.parseInt(page.getNbComputersByPage()));
-			    preparedStatement.setInt(2, Integer.parseInt(page.getNbComputersByPage())*(Integer.parseInt(page.getCurrentPage())-1));
+			if(page.getIsOrdered()!=false) {    		
+				detailsRequest = String.format(detailsRequest, page.getOrderBy().getName());
+			    
 			}
-			else {
-				preparedStatement.setString(1,page.getOrderBy().getName());
-				preparedStatement.setString(2,page.getOrderBy().getType());
-				preparedStatement.setInt(3, Integer.parseInt(page.getNbComputersByPage()));
-			    preparedStatement.setInt(4, Integer.parseInt(page.getNbComputersByPage())*(Integer.parseInt(page.getCurrentPage())-1));
-			}
+			PreparedStatement preparedStatement=connexion.prepareStatement(detailsRequest);
+			preparedStatement.setInt(1, Integer.parseInt(page.getNbComputersByPage()));
+		    preparedStatement.setInt(2, Integer.parseInt(page.getNbComputersByPage())*(Integer.parseInt(page.getCurrentPage())-1));
+		    
 		    /* requête BDD */
 		    resultat = preparedStatement.executeQuery( );
 		    ModelComputer currentComputer=null;
