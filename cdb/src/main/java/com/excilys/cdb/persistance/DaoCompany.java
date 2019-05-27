@@ -8,11 +8,13 @@ import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.cdb.exception.BaseVide;
 import com.excilys.cdb.model.*;
 import com.excilys.cdb.ui.UI;
 
+@Repository
 public class DaoCompany {
 	Connection connexion;
 	/* Création de l'objet gérant les requêtes */
@@ -31,11 +33,6 @@ public class DaoCompany {
 		
 		// load a properties file
 		
-	}
-	private static DaoCompany INSTANCE=new DaoCompany();
-	
-	public static DaoCompany getInstance() {
-		return INSTANCE;
 	}
 	
 

@@ -2,14 +2,23 @@ package com.excilys.cdb.service;
 
 import java.sql.Timestamp;
 
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
 import com.excilys.cdb.exception.NotAIntegerException;
 import com.excilys.cdb.exception.PasLeBonFormatTimestamp;
 import com.excilys.cdb.mapper.DtoComputer;
 import com.excilys.cdb.model.ModelComputer;
 
+@Component
 public class MapperComputer {
+	
+	private MapperComputer(){
+		
+	}
+	
 	 //transforme modelComputer en dtoComputer
-  	public static DtoComputer modelComputerToDtoComputer(ModelComputer mC){
+  	public DtoComputer modelComputerToDtoComputer(ModelComputer mC){
   		DtoComputer dC= new DtoComputer();
   		dC.setId(String.valueOf(mC.getId()));
   		dC.setName(mC.getName());
@@ -23,7 +32,7 @@ public class MapperComputer {
   	}
   	
   	//transforme dtoComputer en  modelComputer
-  	public static ModelComputer dtoComputerToModelComputer(DtoComputer dC) throws PasLeBonFormatTimestamp, NotAIntegerException{
+  	public ModelComputer dtoComputerToModelComputer(DtoComputer dC) throws PasLeBonFormatTimestamp, NotAIntegerException{
   		ModelComputer mC= new ModelComputer();
   		try {
   		mC.setId(Integer.valueOf(dC.getId()));

@@ -14,12 +14,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Controller;
 
 import com.excilys.cdb.exception.BaseVide;
 import com.excilys.cdb.exception.PasDePagesNegException;
 import com.excilys.cdb.mapper.DtoComputer;
 import com.excilys.cdb.persistance.DaoCompany;
+import com.excilys.cdb.service.ServiceCompany;
 import com.excilys.cdb.service.ServiceComputer;
+import com.excilys.cdb.spring.AppConfig;
+import com.excilys.cdb.validator.Validator;
 
 import javax.servlet.annotation.*;
 
@@ -35,12 +40,14 @@ import javax.servlet.annotation.*;
 /**
  * Servlet implementation class DashboardServlet
  */
+
 public class DashboardServlet extends HttpServlet {
 
-	ServiceComputer serviceComputer = ServiceComputer.getInstance();
+	ServiceComputer serviceComputer;
 	Page pageData = Page.getInstance();
 	ArrayList<DtoComputer> computersList = new ArrayList<DtoComputer>();
-
+	AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
+    
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -48,6 +55,10 @@ public class DashboardServlet extends HttpServlet {
 	 */
 	public DashboardServlet() {
 		super();
+		ctx.register(AppConfig.class);
+	    ctx.refresh();
+	    this.serviceComputer = ctx.getBean(ServiceComputer.class);
+	    
 		// TODO Auto-generated constructor stub
 	}
 

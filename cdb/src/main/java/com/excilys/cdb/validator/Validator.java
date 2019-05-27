@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.excilys.cdb.exception.InvalidDateOrderException;
 import com.excilys.cdb.exception.InvalidDateValueException;
@@ -14,6 +15,7 @@ import com.excilys.cdb.mapper.DtoCompany;
 import com.excilys.cdb.mapper.DtoComputer;
 import com.excilys.cdb.ui.UI;
 
+@Component
 public class Validator {
 
 	protected Logger logger = LoggerFactory.getLogger(Validator.class);
@@ -21,11 +23,6 @@ public class Validator {
 	private Validator() {
 	}
 
-	private static Validator INSTANCE = new Validator();
-
-	public static Validator getInstance() {
-		return INSTANCE;
-	}
 
 	private void validateId(String id) throws NotAIntegerException {
 		if (!id.equals("null")) {
@@ -77,10 +74,10 @@ public class Validator {
 			throws NotAIntegerException, RequiredElementException, InvalidDateOrderException {
 		this.validateId(computerDto.getId());
 		this.required("name", computerDto.getName());
-		if ((!computerDto.getIntroduced().equals(""))) {
+		if ((computerDto.getIntroduced()!=null)&&(!computerDto.getIntroduced().equals(""))) {
 			this.validateDate(computerDto.getIntroduced());
 		}
-		if ((!computerDto.getDiscontinued().equals(""))) {
+		if ((computerDto.getDiscontinued()!=null)&&(!computerDto.getDiscontinued().equals(""))) {
 			this.validateDate(computerDto.getDiscontinued());
 			this.validateDateOrder(computerDto.getIntroduced(), computerDto.getDiscontinued());
 		}

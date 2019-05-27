@@ -8,6 +8,7 @@ import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.cdb.WebUiObject.Page;
 import com.excilys.cdb.exception.BaseVide;
@@ -15,7 +16,7 @@ import com.excilys.cdb.exception.RequeteSansResultatException;
 import com.excilys.cdb.exception.TimestampDiscotinuedInferiorToTimestampIntroduced;
 import com.excilys.cdb.model.*;
 
-
+@Repository
 public class DaoComputer {
 	
 	
@@ -34,12 +35,8 @@ public class DaoComputer {
 
 		
 	}
-	private static DaoComputer INSTANCE=new DaoComputer();
 	DAOFactory daoFactory= DAOFactory.getInstance();
 	
-	public static DaoComputer getInstance() {
-		return INSTANCE;
-	}
 	
 	public ArrayList<ModelComputer> select(Page page) throws BaseVide {
 		ArrayList<ModelComputer> computerList = new ArrayList<ModelComputer>();

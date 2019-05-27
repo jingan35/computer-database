@@ -2,27 +2,43 @@ package com.excilys.cdb.controller;
 
 import java.util.ArrayList;
 
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
 import com.excilys.cdb.WebUiObject.Page;
 import com.excilys.cdb.exception.*;
 import com.excilys.cdb.mapper.DtoCompany;
 import com.excilys.cdb.mapper.DtoComputer;
 import com.excilys.cdb.service.ServiceCompany;
 import com.excilys.cdb.service.ServiceComputer;
+import com.excilys.cdb.servlet.DashboardServlet;
+import com.excilys.cdb.servlet.EditComputerServlet;
+import com.excilys.cdb.spring.AppConfig;
+import com.excilys.cdb.validator.Validator;
 
 public class Controller {
 	
-	private Controller()
-    {}
+	private Controller(){
+		ctx.register(AppConfig.class);
+   	 	ctx.refresh();
+   	 	this.sComputer = ctx.getBean(ServiceComputer.class);
+   	 	this.sCompany =ctx.getBean(ServiceCompany.class);
+	}
  
+
+
     /** Instance unique pré-initialisée */
     private static Controller INSTANCE = new Controller();
-    ServiceComputer sComputer= ServiceComputer.getInstance();
-    ServiceCompany sCompany= ServiceCompany.getInstance();
+    ServiceComputer sComputer;
+    ServiceCompany sCompany;
     Page pageData = Page.getInstance();
      
+    
+    static AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
+   
+    
     /** Point d'accès pour l'instance unique du singleton */
-    public static Controller getInstance()
-    {   return INSTANCE;
+    public static Controller getInstance(){
+    	return INSTANCE;
     }
     
     //identifie les commandes et appelle des bonnes fonctions 

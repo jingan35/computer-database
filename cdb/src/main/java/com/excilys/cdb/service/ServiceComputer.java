@@ -3,6 +3,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
+import org.springframework.stereotype.Service;
+
 import com.excilys.cdb.WebUiObject.Page;
 import com.excilys.cdb.exception.BaseVide;
 import com.excilys.cdb.exception.NotAIntegerException;
@@ -15,22 +17,21 @@ import com.excilys.cdb.mapper.DtoComputer;
 import com.excilys.cdb.model.*;
 import com.excilys.cdb.persistance.DaoComputer;
 
+@Service
 public class ServiceComputer {
 	
 	int countComputers=0;
-	
-	private ServiceComputer()
-    {}
  
-	DaoComputer daoComputer = DaoComputer.getInstance();
-    /** Instance unique pré-initialisée */
-    private static ServiceComputer INSTANCE = new ServiceComputer();
+	DaoComputer daoComputer ;
+    
+    
+    MapperComputer mapperComputer ;
      
-    /** Point d'accès pour l'instance unique du singleton */
-    public static ServiceComputer getInstance()
-    {   return INSTANCE;
+    private ServiceComputer(DaoComputer daoComputer, MapperComputer mapperComputer){
+    	this.daoComputer=daoComputer;
+    	this.mapperComputer=mapperComputer;
+    	
     }
-	
  
   	
   	public ArrayList<DtoComputer> selectComputer(Page page) throws BaseVide, PasDePagesNegException{
@@ -42,7 +43,7 @@ public class ServiceComputer {
   			throw new PasDePagesNegException();
   		Stream<ModelComputer> streamModelComputerList= list.stream();
   		streamModelComputerList.forEach(element ->{
-  			DtoComputer dtoComp= MapperComputer.modelComputerToDtoComputer(element);
+  			DtoComputer dtoComp= mapperComputer.modelComputerToDtoComputer(element);
   			resultList.add(dtoComp);
   			
   		});
@@ -62,7 +63,7 @@ public class ServiceComputer {
   			throw new PasDePagesNegException();
   		Stream<ModelComputer> streamModelComputerList= list.stream();
   		streamModelComputerList.forEach(element ->{
-  			DtoComputer dtoComp= MapperComputer.modelComputerToDtoComputer(element);
+  			DtoComputer dtoComp= mapperComputer.modelComputerToDtoComputer(element);
   			resultList.add(dtoComp);
   			
   		});
@@ -77,19 +78,19 @@ public class ServiceComputer {
   		
   		ModelComputer mc = daoComputer.selectOne(id);
   		
-  		DtoComputer result=MapperComputer.modelComputerToDtoComputer(mc);
+  		DtoComputer result=mapperComputer.modelComputerToDtoComputer(mc);
   		return result;
   	}
   	
   	public void insertComputer(DtoComputer dtoComputer) throws PasLeBonFormatTimestamp, NotAIntegerException, TimestampDiscotinuedInferiorToTimestampIntroduced {
-  		ModelComputer computerToAdd = MapperComputer.dtoComputerToModelComputer( dtoComputer);
+  		ModelComputer computerToAdd = mapperComputer.dtoComputerToModelComputer( dtoComputer);
 	  	daoComputer.insert(computerToAdd);
   		
   		
   	}
   	
   	public void updateComputer(DtoComputer dtoComputer) throws PasLeBonFormatTimestamp, NotAIntegerException, TimestampDiscotinuedInferiorToTimestampIntroduced {
-  		ModelComputer computerToUpdate = MapperComputer.dtoComputerToModelComputer( dtoComputer);
+  		ModelComputer computerToUpdate = mapperComputer.dtoComputerToModelComputer( dtoComputer);
   		if(computerToUpdate.getDiscontinued()!=null && computerToUpdate.getDiscontinued().before(computerToUpdate.getIntroduced())){
 			throw new TimestampDiscotinuedInferiorToTimestampIntroduced();
 		}

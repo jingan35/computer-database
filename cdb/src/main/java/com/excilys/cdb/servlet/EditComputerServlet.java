@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Controller;
 
 import com.excilys.cdb.exception.BaseVide;
 import com.excilys.cdb.exception.InvalidDateOrderException;
@@ -24,24 +26,31 @@ import com.excilys.cdb.mapper.DtoCompany;
 import com.excilys.cdb.mapper.DtoComputer;
 import com.excilys.cdb.service.ServiceCompany;
 import com.excilys.cdb.service.ServiceComputer;
+import com.excilys.cdb.spring.AppConfig;
 import com.excilys.cdb.validator.Validator;
 
 /**
  * Servlet implementation class EditComputer
  */
+
 public class EditComputerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	ServiceComputer serviceComputer = ServiceComputer.getInstance();
+	ServiceComputer serviceComputer ;
     private DtoComputer currentComputer;   
-    ServiceCompany seviceCompany = ServiceCompany.getInstance();
+    ServiceCompany serviceCompany ;
 	ArrayList<DtoCompany> companiesList = new ArrayList<DtoCompany>();
-	Validator validator = Validator.getInstance();
+	Validator validator ;
+	AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public EditComputerServlet() {
+    public EditComputerServlet(){
         super();
-        // TODO Auto-generated constructor stub
+        ctx.register(AppConfig.class);
+        ctx.refresh();
+        this.serviceComputer = ctx.getBean(ServiceComputer.class);
+        this.serviceCompany =ctx.getBean(ServiceCompany.class);
+        this.validator= ctx.getBean(Validator.class);
     }
 
 	/**
@@ -63,7 +72,7 @@ public class EditComputerServlet extends HttpServlet {
 			request.setAttribute("discontinued", discontinued);
 			request.setAttribute("company_name", companyName);
 			request.setAttribute("companyId", companyId);
-			companiesList=ServiceCompany.getInstance().selectAllCompanies();
+			companiesList=serviceCompany.selectAllCompanies();
 			request.setAttribute("companiesList", companiesList);
 			
 		} catch (RequeteSansResultatException | BaseVide e) {

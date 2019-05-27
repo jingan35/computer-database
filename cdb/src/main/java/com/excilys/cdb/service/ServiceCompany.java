@@ -2,32 +2,33 @@ package com.excilys.cdb.service;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
+import org.springframework.stereotype.Service;
+
 import com.excilys.cdb.exception.BaseVide;
 import com.excilys.cdb.mapper.DtoCompany;
 import com.excilys.cdb.mapper.DtoCompany;
 import com.excilys.cdb.model.*;
 import com.excilys.cdb.persistance.DaoCompany;
 
+@Service
 public class ServiceCompany {
-	private ServiceCompany()
-    {}
-	DaoCompany dC = DaoCompany.getInstance();
-    /** Instance unique pré-initialisée */
-    private static ServiceCompany INSTANCE = new ServiceCompany();
-     
-    /** Point d'accès pour l'instance unique du singleton */
-    public static ServiceCompany getInstance()
-    {   return INSTANCE;
-    }
 	
+	DaoCompany daoCompany ;
+    /** Instance unique pré-initialisée */
+    MapperCompany mapperCompany;
+     
+    private ServiceCompany(DaoCompany daoCompany, MapperCompany mapperCompany){
+    	this.daoCompany=daoCompany;
+    	this.mapperCompany=mapperCompany;
+    }
 			
 			public ArrayList<DtoCompany> selectCompany(int nbRowByPage,int page) throws BaseVide{
 				
 		  		//le liste renvoyée
 		  		ArrayList<DtoCompany> resultList = new ArrayList<DtoCompany>();
-		  		ArrayList<ModelCompany> list= dC.select(nbRowByPage,page);
+		  		ArrayList<ModelCompany> list= daoCompany.select(nbRowByPage,page);
 		  		for(int i=0;i<list.size();i++) {
-		  			resultList.add(MapperCompany.modelCompanyToDtoCompany(list.get(i)));
+		  			resultList.add(mapperCompany.modelCompanyToDtoCompany(list.get(i)));
 		  		}
 				return resultList;
 				
@@ -37,16 +38,16 @@ public class ServiceCompany {
 				
 		  		//le liste renvoyée
 		  		ArrayList<DtoCompany> resultList = new ArrayList<DtoCompany>();
-		  		ArrayList<ModelCompany> list= dC.selectAll();
+		  		ArrayList<ModelCompany> list= daoCompany.selectAll();
 		  		for(int i=0;i<list.size();i++) {
-		  			resultList.add(MapperCompany.modelCompanyToDtoCompany(list.get(i)));
+		  			resultList.add(mapperCompany.modelCompanyToDtoCompany(list.get(i)));
 		  		}
 				return resultList;
 				
 			}
 			
 			public void deleteCompanyEtc(int id) {
-				dC.delete(id);
+				daoCompany.delete(id);
 			}
 	
 }
