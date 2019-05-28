@@ -8,10 +8,12 @@ import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.cdb.exception.BaseVide;
 import com.excilys.cdb.model.*;
+import com.excilys.cdb.spring.AppConfig;
 import com.excilys.cdb.ui.UI;
 
 @Repository
@@ -20,9 +22,10 @@ public class DaoCompany {
 	/* Création de l'objet gérant les requêtes */
 	
 	
-	DAOFactory daoFactory= DAOFactory.getInstance();
+	DAOFactory daoFactory;
 	
-	private DaoCompany(){
+	
+	private DaoCompany(DAOFactory daoFactory){
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
@@ -30,8 +33,8 @@ public class DaoCompany {
 			Logger logger = LoggerFactory.getLogger(DaoCompany.class);
 			logger.error(e.getMessage(), e);
 		}
+		this.daoFactory=daoFactory;
 		
-		// load a properties file
 		
 	}
 	

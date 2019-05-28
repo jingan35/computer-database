@@ -40,7 +40,7 @@ public class MapperComputer {
 				throw new NotAIntegerException();
 		}
   		mC.setName(dC.getName());
-  		if(!(dC.getIntroduced().equals("null"))&&!(dC.getIntroduced().equals(""))) {
+  		if(dC.getIntroduced() != null && !(dC.getIntroduced().equals(""))) {
   			System.out.println(dC.getIntroduced()+" introducedMagic");
   			try {
   			mC.setIntroduced(Timestamp.valueOf(dC.getIntroduced()+" 12:00:00"));
@@ -53,7 +53,7 @@ public class MapperComputer {
   			System.out.println("nullIntroduced");
   			mC.setIntroduced(null);
   		}
-  		if(!(dC.getDiscontinued().equals("null"))&&!(dC.getDiscontinued().trim().equals(""))) {
+  		if(dC.getDiscontinued()!= null &&!(dC.getDiscontinued().trim().equals(""))) {
   			System.out.println(dC.getDiscontinued()+" DiscontinuededMagic");
   			try {
   	  			mC.setDiscontinued(Timestamp.valueOf(dC.getDiscontinued()+" 12:00:00"));

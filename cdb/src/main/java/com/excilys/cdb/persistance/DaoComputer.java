@@ -8,6 +8,12 @@ import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.cdb.WebUiObject.Page;
@@ -15,13 +21,18 @@ import com.excilys.cdb.exception.BaseVide;
 import com.excilys.cdb.exception.RequeteSansResultatException;
 import com.excilys.cdb.exception.TimestampDiscotinuedInferiorToTimestampIntroduced;
 import com.excilys.cdb.model.*;
+import com.excilys.cdb.service.ServiceComputer;
+import com.excilys.cdb.spring.AppConfig;
 
 @Repository
 public class DaoComputer {
 	
 	
 	
-	private DaoComputer(){
+	//DAOFactory daoFactory;
+	NamedParameterJdbcTemplate namedParameterJdbcTemplate; 
+	SqlParameterSource namedParameters = new MapSqlParameterSource();
+	private DaoComputer(NamedParameterJdbcTemplate namedParameterJdbcTemplate){
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
@@ -30,37 +41,41 @@ public class DaoComputer {
 			logger.error(e.getMessage(), e);
 		}
 		
-		
-		// load a properties file
-
+        //this.daoFactory = daoFactory;
+        this.namedParameterJdbcTemplate=namedParameterJdbcTemplate;
 		
 	}
-	DAOFactory daoFactory= DAOFactory.getInstance();
 	
 	
 	public ArrayList<ModelComputer> select(Page page) throws BaseVide {
 		ArrayList<ModelComputer> computerList = new ArrayList<ModelComputer>();
 		ResultSet resultat =null;
-		try (Connection connexion=daoFactory.getConnection()){
+		//try (Connection connexion=daoFactory.getConnection()){
 			String requete="SELECT computer.id,computer.name,introduced,discontinued,company.name AS company_name,company.id "
 		    		+ "FROM computer LEFT JOIN company ON computer.company_id = company.id ";
 			
-			String searchRequestPart = "WHERE computer.name LIKE '%"+page.getSearched()+"%' ";
+			String searchRequestPart = "WHERE computer.name LIKE '%:searched%' ";
 			
-			String OrderByRequestPart = "ORDER BY %s ";
+			String OrderByRequestPart = "ORDER BY :orderBy ";
 			
-			String paginationRequestPage = "LIMIT ? OFFSET ?;";
+			String paginationRequestPage = "LIMIT NbComputersByPage OFFSET departureId ;";
 			
 			String detailsRequest= (page.getSearched()==null)?("SELECT computer.id,computer.name,introduced,discontinued,company.name AS company_name,company.id "
 			    		+ "FROM computer LEFT JOIN company ON computer.company_id = company.id LIMIT ? OFFSET ?;"):("SELECT computer.id,computer.name,introduced,discontinued,company.name AS company_name,company.id "
 					    		+ "FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name LIKE '%"+page.getSearched()+"%' LIMIT ? OFFSET ?;");
 			    		
 			detailsRequest = requete;
-			if(page.getSearched()!=null)
+			if(page.getSearched()!=null) {
+				((MapSqlParameterSource) namedParameters).addValue("searched", page.getSearched());
 				detailsRequest+=searchRequestPart;
-			if(page.getIsOrdered()!=false)
+			}
+			if(page.getIsOrdered()!=false) {
+				((MapSqlParameterSource) namedParameters).addValue("orderBy", page.getOrderBy().getName());
 				detailsRequest+=OrderByRequestPart;
+			}
 			detailsRequest+=paginationRequestPage;
+			((MapSqlParameterSource) namedParameters).addValue("NbComputersByPage", page.getNbComputersByPage());
+			((MapSqlParameterSource) namedParameters).addValue("departureId", Integer.parseInt(page.getNbComputersByPage())*(Integer.parseInt(page.getCurrentPage())-1));
 			System.out.println(detailsRequest);
 			
 			 
@@ -71,12 +86,14 @@ public class DaoComputer {
 				detailsRequest = String.format(detailsRequest, page.getOrderBy().getName());
 			    
 			}
-			PreparedStatement preparedStatement=connexion.prepareStatement(detailsRequest);
+			/*PreparedStatement preparedStatement=connexion.prepareStatement(detailsRequest);
 			preparedStatement.setInt(1, Integer.parseInt(page.getNbComputersByPage()));
-		    preparedStatement.setInt(2, Integer.parseInt(page.getNbComputersByPage())*(Integer.parseInt(page.getCurrentPage())-1));
+		    preparedStatement.setInt(2, Integer.parseInt(page.getNbComputersByPage())*(Integer.parseInt(page.getCurrentPage())-1));*/
 		    
 		    /* requête BDD */
 		    resultat = preparedStatement.executeQuery( );
+		    namedParameterJdbcTemplate.queryForObject(
+		    	    detailsRequest, namedParameters, String.class);
 		    ModelComputer currentComputer=null;
 		    if ( resultat.next() ) {
 		    	int Id = resultat.getInt( "computer.id" );
@@ -93,9 +110,12 @@ public class DaoComputer {
 			    computerList.add(currentComputer);
 			}
 		    
+		    
 		    else {
 		    	throw new BaseVide();
 		    }
+		    
+		    RowMapper<ModelComputer> vRowMapper = new ModelComputerRowMapper();
 		    
 			/* Récupération des données du résultat de la requête de lecture */
 			while ( resultat.next() ) {
@@ -114,12 +134,12 @@ public class DaoComputer {
 				computerList.add(currentComputer);
 			}
 
-		} catch ( SQLException e ) {
+		/*} catch ( SQLException e ) {
 		    /* Gérer les éventuelles erreurs ici */
 			
-			Logger logger = LoggerFactory.getLogger(DaoCompany.class);
+			/*Logger logger = LoggerFactory.getLogger(DaoCompany.class);
 			logger.error(e.getMessage(), e);
-		} 
+		} */
 		/* Exécution d'une requête de lecture */
 		
 		

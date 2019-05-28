@@ -7,22 +7,28 @@ import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import com.excilys.cdb.WebUiObject.Page;
 import com.excilys.cdb.exception.BaseVide;
 import com.excilys.cdb.exception.RequeteSansResultatException;
 import com.excilys.cdb.model.ModelComputer;
 import com.excilys.cdb.persistance.DaoComputer;
+import com.excilys.cdb.service.ServiceComputer;
+import com.excilys.cdb.spring.AppConfig;
 
 public class DaoComputerTest {
 	DaoComputer daoComp;
 	Page page;
+	AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
 
 	@Before
 	public void setUp() throws Exception {
 		UTDatabase.getInstance().reload();
-		daoComp = DaoComputer.getInstance();
 		page=Page.getInstance();
+		ctx.register(AppConfig.class);
+        ctx.refresh();
+        this.daoComp = ctx.getBean(DaoComputer.class);
 
 	}
 

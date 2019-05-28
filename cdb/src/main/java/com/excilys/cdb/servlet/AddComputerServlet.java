@@ -80,6 +80,7 @@ public class AddComputerServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		DtoComputer dtoComputer= new DtoComputer("0",request.getParameter("computerName"),request.getParameter("introduced"),request.getParameter("discontinued"),
 				request.getParameter("companyId"));
+		System.out.println(request.getParameter("introduced"));
 		try {
 			validator.validateComputerDto(dtoComputer);
 			serviceComputer.insertComputer(dtoComputer);

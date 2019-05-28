@@ -4,11 +4,13 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.TimeZone;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
+@Component
 public class DAOFactory {
 
 	String configFile = "/hikari.properties";
@@ -16,28 +18,15 @@ public class DAOFactory {
 	HikariDataSource ds = new HikariDataSource(cfg);
 
 	private DAOFactory() {
-
-	}
-
-	private static DAOFactory INSTANCE = null;
-
-	/**
-	 * Point d'accès pour l'instance unique du singleton
-	 * 
-	 * @throws SQLException
-	 * @throws ClassNotFoundException
-	 */
-	public static DAOFactory getInstance() {
-		if (INSTANCE == null) {
-			TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-			INSTANCE = new DAOFactory();
-
-		}
-		return INSTANCE;
+		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 	}
 
 	public Connection getConnection() throws SQLException {
 
 		return ds.getConnection();
+	}
+	
+	public HikariDataSource getDataSource() {
+		return ds;
 	}
 }
