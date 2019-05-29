@@ -24,7 +24,7 @@ public class MapperComputer {
   		dC.setName(mC.getName());
   		dC.setIntroduced(String.valueOf(mC.getIntroduced()));
   		dC.setDiscontinued(String.valueOf(mC.getDiscontinued()));
-  		dC.setCompanyId(String.valueOf(mC.getCompanyId()));
+  		dC.setCompanyId(String.valueOf(mC.getCompany_id()));
   		if(mC.getCompanyName()!=null)
   			dC.setCompanyName(mC.getCompanyName());;
   		return dC;
@@ -67,13 +67,13 @@ public class MapperComputer {
   		}
   		if(!dC.getCompanyId().equals("null")) {
   			try {
-  				mC.setCompanyId(Integer.valueOf(dC.getCompanyId()));
+  				mC.setCompany_id(Integer.valueOf(dC.getCompanyId()));
   			}catch(java.lang.NumberFormatException nFE) {
   				throw new NotAIntegerException();
   			}
   		}
   		else {
-  			mC.setCompanyId(null);
+  			mC.setCompany_id(null);
   		}
   		return mC;
   		

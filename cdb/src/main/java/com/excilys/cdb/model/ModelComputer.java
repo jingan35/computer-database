@@ -52,7 +52,7 @@ public class ModelComputer {
 		return discontinued;
 	}
 
-	public Integer getCompanyId() {
+	public Integer getCompany_id() {
 		// TODO Auto-generated method stub
 		return company_id;
 	}
@@ -82,7 +82,7 @@ public class ModelComputer {
 		discontinued=T;
 	}
 
-	public void setCompanyId(Integer newCompanyId) {
+	public void setCompany_id(Integer newCompanyId) {
 		// TODO Auto-generated method stub
 		company_id=newCompanyId;
 	}

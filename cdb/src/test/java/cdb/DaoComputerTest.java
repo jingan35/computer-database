@@ -51,7 +51,7 @@ public class DaoComputerTest {
 		model.setName("Test");
 		model.setIntroduced(null);
 		model.setDiscontinued(null);
-		model.setCompanyId(null);
+		model.setCompany_id(null);
 
 		int idAdded = daoComp.insert(model);
 

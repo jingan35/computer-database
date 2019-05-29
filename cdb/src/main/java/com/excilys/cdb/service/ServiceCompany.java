@@ -1,14 +1,14 @@
 package com.excilys.cdb.service;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.cdb.exception.BaseVide;
 import com.excilys.cdb.mapper.DtoCompany;
-import com.excilys.cdb.mapper.DtoCompany;
-import com.excilys.cdb.model.*;
+import com.excilys.cdb.model.ModelCompany;
 import com.excilys.cdb.persistance.DaoCompany;
+import com.excilys.cdb.persistance.DaoComputer;
 
 @Service
 public class ServiceCompany {
@@ -16,10 +16,12 @@ public class ServiceCompany {
 	DaoCompany daoCompany ;
     /** Instance unique pré-initialisée */
     MapperCompany mapperCompany;
+    DaoComputer daoComputer;
      
-    private ServiceCompany(DaoCompany daoCompany, MapperCompany mapperCompany){
+    private ServiceCompany(DaoCompany daoCompany, MapperCompany mapperCompany, DaoComputer daoComputer){
     	this.daoCompany=daoCompany;
     	this.mapperCompany=mapperCompany;
+    	this.daoComputer = daoComputer;
     }
 			
 			public ArrayList<DtoCompany> selectCompany(int nbRowByPage,int page) throws BaseVide{
@@ -46,8 +48,10 @@ public class ServiceCompany {
 				
 			}
 			
-			public void deleteCompanyEtc(int id) {
-				daoCompany.delete(id);
+			@Transactional
+			public void deleteCompany(int id) {
+				//delete allcomputer where company_id = id
+				//delete 1company
 			}
 	
 }
