@@ -26,6 +26,7 @@ import com.excilys.cdb.persistance.DaoCompany;
 import com.excilys.cdb.service.ServiceCompany;
 import com.excilys.cdb.service.ServiceComputer;
 import com.excilys.cdb.spring.AppConfig;
+import com.excilys.cdb.spring.AppContext;
 import com.excilys.cdb.validator.Validator;;
 
 /**
@@ -39,7 +40,7 @@ public class AddComputerServlet extends HttpServlet {
 	Validator validator ;
 	ServiceComputer serviceComputer ;
 	AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
-    
+	AppContext appContext;
    
 	
 	private static final long serialVersionUID = 1L;
@@ -49,11 +50,10 @@ public class AddComputerServlet extends HttpServlet {
      */
     public AddComputerServlet() {
         super();
-        ctx.register(AppConfig.class);
-        ctx.refresh();
-        this.serviceComputer = ctx.getBean(ServiceComputer.class);
-        this.serviceCompany =ctx.getBean(ServiceCompany.class);
-        this.validator= ctx.getBean(Validator.class);
+        this.appContext=AppContext.getInstance();
+	    this.serviceComputer = this.appContext.getServiceComputer();
+        this.serviceCompany =this.appContext.getServiceCompany();
+        this.validator= this.appContext.getValidator();
     }
 
 	/**

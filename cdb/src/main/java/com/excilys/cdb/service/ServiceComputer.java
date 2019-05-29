@@ -1,6 +1,7 @@
 package com.excilys.cdb.service;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
@@ -38,7 +39,7 @@ public class ServiceComputer {
   		
   		//le liste renvoyée
   		ArrayList<DtoComputer> resultList = new ArrayList<DtoComputer>();
-  		ArrayList<ModelComputer> list= daoComputer.select(page);
+  		List<ModelComputer> list= daoComputer.select(page);
   		if(Integer.parseInt(page.getCurrentPage())<=0)
   			throw new PasDePagesNegException();
   		Stream<ModelComputer> streamModelComputerList= list.stream();
@@ -58,7 +59,7 @@ public class ServiceComputer {
   		
   		//le liste renvoyée
   		ArrayList<DtoComputer> resultList = new ArrayList<DtoComputer>();
-  		ArrayList<ModelComputer> list= daoComputer.select(page);
+  		List<ModelComputer> list= daoComputer.select(page);
   		if(Integer.parseInt(page.getCurrentPage())<=0)
   			throw new PasDePagesNegException();
   		Stream<ModelComputer> streamModelComputerList= list.stream();

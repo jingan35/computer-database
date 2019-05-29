@@ -24,6 +24,7 @@ import com.excilys.cdb.persistance.DaoCompany;
 import com.excilys.cdb.service.ServiceCompany;
 import com.excilys.cdb.service.ServiceComputer;
 import com.excilys.cdb.spring.AppConfig;
+import com.excilys.cdb.spring.AppContext;
 import com.excilys.cdb.validator.Validator;
 
 import javax.servlet.annotation.*;
@@ -46,7 +47,7 @@ public class DashboardServlet extends HttpServlet {
 	ServiceComputer serviceComputer;
 	Page pageData = Page.getInstance();
 	ArrayList<DtoComputer> computersList = new ArrayList<DtoComputer>();
-	AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
+	AppContext appContext;
     
 	private static final long serialVersionUID = 1L;
 
@@ -55,9 +56,8 @@ public class DashboardServlet extends HttpServlet {
 	 */
 	public DashboardServlet() {
 		super();
-		ctx.register(AppConfig.class);
-	    ctx.refresh();
-	    this.serviceComputer = ctx.getBean(ServiceComputer.class);
+		this.appContext=AppContext.getInstance();
+	    this.serviceComputer = this.appContext.getServiceComputer();
 	    
 		// TODO Auto-generated constructor stub
 	}
@@ -70,7 +70,7 @@ public class DashboardServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		pageData.setCurrentPage((request.getParameter("page") == null||request.getParameter("page") == "") ? "1" : request.getParameter("page"));
+		pageData.setCurrentPage((request.getParameter("page") == null||request.getParameter("page").equals("") ) ? "1" : request.getParameter("page"));
 		pageData.setSearched(request.getParameter("search"));
 		boolean error = false;
 
@@ -134,6 +134,14 @@ public class DashboardServlet extends HttpServlet {
 			if (lastPage < Integer.parseInt(pageData.getCurrentPage())) {
 				pageData.setCurrentPage("1");
 			}
+			
+			
+			
+			
+			
+			
+			
+			
 			computersList = (pageData.getSearched() == null) ? (serviceComputer.selectComputer(pageData))
 					: (serviceComputer.selectComputerSearch(pageData));
 			request.setAttribute("computersList", computersList);

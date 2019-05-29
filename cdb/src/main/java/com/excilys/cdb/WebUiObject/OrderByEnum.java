@@ -15,10 +15,6 @@ public enum OrderByEnum {
 		//this.type=("ASC");
 	}
 	
-	OrderByEnum(String name, String type){
-		this.name=name;
-		//this.type=type;
-	}
 	
 	String name;
 	//String type;

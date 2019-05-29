@@ -86,6 +86,14 @@ public class ModelComputer {
 		// TODO Auto-generated method stub
 		company_id=newCompanyId;
 	}
+	
+	
+
+	@Override
+	public String toString() {
+		return "ModelComputer [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued="
+				+ discontinued + ", company_id=" + company_id + ", companyName=" + companyName + "]";
+	}
 
 	@Override
 	public int hashCode() {

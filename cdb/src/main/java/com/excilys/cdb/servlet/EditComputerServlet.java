@@ -27,6 +27,7 @@ import com.excilys.cdb.mapper.DtoComputer;
 import com.excilys.cdb.service.ServiceCompany;
 import com.excilys.cdb.service.ServiceComputer;
 import com.excilys.cdb.spring.AppConfig;
+import com.excilys.cdb.spring.AppContext;
 import com.excilys.cdb.validator.Validator;
 
 /**
@@ -41,16 +42,16 @@ public class EditComputerServlet extends HttpServlet {
 	ArrayList<DtoCompany> companiesList = new ArrayList<DtoCompany>();
 	Validator validator ;
 	AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
+	AppContext appContext;
     /**
      * @see HttpServlet#HttpServlet()
      */
     public EditComputerServlet(){
         super();
-        ctx.register(AppConfig.class);
-        ctx.refresh();
-        this.serviceComputer = ctx.getBean(ServiceComputer.class);
-        this.serviceCompany =ctx.getBean(ServiceCompany.class);
-        this.validator= ctx.getBean(Validator.class);
+        this.appContext=AppContext.getInstance();
+	    this.serviceComputer = this.appContext.getServiceComputer();
+        this.serviceCompany =this.appContext.getServiceCompany();
+        this.validator= this.appContext.getValidator();
     }
 
 	/**
