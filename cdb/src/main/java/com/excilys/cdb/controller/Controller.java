@@ -13,27 +13,23 @@ import com.excilys.cdb.service.ServiceComputer;
 import com.excilys.cdb.servlet.DashboardServlet;
 import com.excilys.cdb.servlet.EditComputerServlet;
 import com.excilys.cdb.spring.AppConfig;
+import com.excilys.cdb.spring.AppContext;
 import com.excilys.cdb.validator.Validator;
 
 public class Controller {
-	
-	private Controller(){
-		ctx.register(AppConfig.class);
-   	 	ctx.refresh();
-   	 	this.sComputer = ctx.getBean(ServiceComputer.class);
-   	 	this.sCompany =ctx.getBean(ServiceCompany.class);
-	}
- 
-
-
-    /** Instance unique pré-initialisée */
+	 /** Instance unique pré-initialisée */
     private static Controller INSTANCE = new Controller();
     ServiceComputer sComputer;
     ServiceCompany sCompany;
     Page pageData = Page.getInstance();
-     
+    AppContext appContext=AppContext.getInstance();
     
-    static AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
+	private Controller(){
+		sCompany= appContext.getServiceCompany();
+		sComputer=appContext.getServiceComputer();
+		
+	}
+    
    
     
     /** Point d'accès pour l'instance unique du singleton */
@@ -55,7 +51,9 @@ public class Controller {
     				throw new NotIntForPageException();
     			}
     			// Demander la List des computers
-    			computerList(nbRowByPage,page);
+    			pageData.setCurrentPage(cmdTab[1]);
+    			pageData.setNbComputersByPage(""+nbRowByPage+"");
+    			computerList();
     		}
     		else if(cmdTab[0].equalsIgnoreCase("lc")) {
     			int page=0;
@@ -65,7 +63,9 @@ public class Controller {
     				throw new NotIntForPageException();
     			}
     			//liste des compagnies
-    			companyList(nbRowByPage,page);
+    			pageData.setCurrentPage(cmdTab[1]);
+    			pageData.setNbComputersByPage(""+nbRowByPage+"");
+    			companyList();
     		}
     		else if(cmdTab[0].equalsIgnoreCase("sc")) {
     			//
@@ -166,7 +166,7 @@ public class Controller {
 		
 	}
 
-	String computerList(int nbRowByPage,int page) throws BaseVide, PasDePagesNegException {
+	String computerList() throws BaseVide, PasDePagesNegException {
     	ArrayList<DtoComputer> computerList=sComputer.selectComputer(pageData);
     	String result="";
     	for(int i=0;i<computerList.size();i++) {
@@ -176,8 +176,8 @@ public class Controller {
     	return result;
     }
     
-    String companyList(int nbRowByPage,int page) throws BaseVide {
-    	ArrayList<DtoCompany> companyList=sCompany.selectCompany(nbRowByPage,page);
+    String companyList() throws BaseVide {
+    	ArrayList<DtoCompany> companyList=sCompany.selectCompany(pageData);
     	String result="";
     	for(int i=0;i<companyList.size();i++) {
     		result+=companyList.get(i).toString()+"\n";

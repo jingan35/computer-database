@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import org.slf4j.Logger;
@@ -15,6 +16,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.excilys.cdb.WebUiObject.Page;
 import com.excilys.cdb.exception.BaseVide;
 import com.excilys.cdb.model.*;
 import com.excilys.cdb.spring.AppConfig;
@@ -43,95 +45,41 @@ public class DaoCompany {
 
 	}
 
-	public ArrayList<ModelCompany> select(int nbRowByPage, int page) throws BaseVide {
-		// TODO Auto-generated method stub
-		ArrayList<ModelCompany> companyList = new ArrayList<ModelCompany>();
-		ResultSet resultat = null;
-		try (Connection connexion = daoFactory.getConnection()) {
+	public List<ModelCompany> select(Page page) throws BaseVide {
+		/* requête BDD */
+		MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+		namedParameters.addValue("NbComputersByPage", Integer.parseInt(page.getNbComputersByPage()),Types.INTEGER);
+		namedParameters.addValue("departureId", Integer.parseInt(page.getNbComputersByPage())*(Integer.parseInt(page.getCurrentPage())-1),Types.INTEGER);
+		
+		String requete = "SELECT id, name FROM company LIMIT :NbComputersByPage OFFSET :departureId ;";
+		ModelCompanyRowMapper rowMapper = new ModelCompanyRowMapper();
+		List<ModelCompany> listModelCompany= namedParameterJdbcTemplate.query(requete,namedParameters, rowMapper);
 
-			String requete = "SELECT id, name FROM company LIMIT ? OFFSET ?;";
-			PreparedStatement preparedStatement = connexion.prepareStatement(requete);
-			preparedStatement.setInt(1, nbRowByPage);
-			preparedStatement.setInt(2, nbRowByPage * (page - 1));
-			/* requête BDD */
-			resultat = preparedStatement.executeQuery();
-
-			if (resultat.next()) {
-				int id = resultat.getInt("id");
-				String name = resultat.getString("name");
-				// creer le modelComputer et ajout dans la liste
-				companyList.add(new ModelCompany(id, name));
-			}
-
-			else {
-				throw new BaseVide();
-			}
-
-			/* Récupération des données du résultat de la requête de lecture */
-			while (resultat.next()) {
-				int id = resultat.getInt("id");
-				String name = resultat.getString("name");
-				// creer le modelComputer et ajout dans la liste
-				companyList.add(new ModelCompany(id, name));
-			}
-
-		} catch (SQLException e) {
-			/* Gérer les éventuelles erreurs ici */
-			Logger logger = LoggerFactory.getLogger(DaoCompany.class);
-			logger.error(e.getMessage(), e);
+		if(listModelCompany.isEmpty()) {
+			throw new BaseVide();
 		}
-		/* Exécution d'une requête de lecture */
-
-		return companyList;
+		
+		return listModelCompany;
 	}
 
-	public ArrayList<ModelCompany> selectAll() throws BaseVide {
-		// TODO Auto-generated method stub
-		ArrayList<ModelCompany> companyList = new ArrayList<ModelCompany>();
-		ResultSet resultat = null;
-		try (Connection connexion = daoFactory.getConnection()) {
+	public List<ModelCompany> selectAll() throws BaseVide {
+		/* requête BDD */
+		String requete = "SELECT id, name FROM company;";
+		ModelCompanyRowMapper rowMapper = new ModelCompanyRowMapper();
+		List<ModelCompany> listModelCompany= namedParameterJdbcTemplate.query(requete, rowMapper);
 
-			String requete = "SELECT id, name FROM company;";
-			PreparedStatement preparedStatement = connexion.prepareStatement(requete);
-
-			/* requête BDD */
-			resultat = preparedStatement.executeQuery();
-
-			if (resultat.next()) {
-				int id = resultat.getInt("id");
-				String name = resultat.getString("name");
-				// creer le modelComputer et ajout dans la liste
-				companyList.add(new ModelCompany(id, name));
-			}
-
-			else {
-				throw new BaseVide();
-			}
-
-			/* Récupération des données du résultat de la requête de lecture */
-			while (resultat.next()) {
-				int id = resultat.getInt("id");
-				String name = resultat.getString("name");
-				// creer le modelComputer et ajout dans la liste
-				companyList.add(new ModelCompany(id, name));
-			}
-
-		} catch (SQLException e) {
-			/* Gérer les éventuelles erreurs ici */
-			Logger logger = LoggerFactory.getLogger(DaoCompany.class);
-			logger.error(e.getMessage(), e);
+		if(listModelCompany.isEmpty()) {
+			throw new BaseVide();
 		}
-		/* Exécution d'une requête de lecture */
-
-		return companyList;
+		
+		return listModelCompany;
 	}
 
 	public void delete(int id) {
-		String requestComputer = "DELETE FROM computer WHERE company_id=? ;";
+		String requestCompany = "DELETE FROM company WHERE id=:id ;";
 		MapSqlParameterSource namedParameters = new MapSqlParameterSource();
-
 		namedParameters.addValue("id", id);
-		int idUpdated = namedParameterJdbcTemplate.update(requestComputer, namedParameters);
+		int idUpdated = namedParameterJdbcTemplate.update(requestCompany, namedParameters);
 
 	}
 

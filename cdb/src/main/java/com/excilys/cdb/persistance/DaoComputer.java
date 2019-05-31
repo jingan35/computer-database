@@ -44,7 +44,6 @@ public class DaoComputer {
 	
 	
 	public List<ModelComputer> select(Page page) throws BaseVide {
-		ResultSet resultat =null;
 		//try (Connection connexion=daoFactory.getConnection()){
 		MapSqlParameterSource namedParameters = new MapSqlParameterSource();
 			String requete="SELECT computer.id,computer.name,introduced,discontinued,company.name AS company_name,company.id "
@@ -74,7 +73,6 @@ public class DaoComputer {
 		    /* requête BDD */
 			ModelComputerRowMapper rowMapper = new ModelComputerRowMapper();
 			List<ModelComputer> listModelComputers= namedParameterJdbcTemplate.query(detailsRequest, namedParameters, rowMapper);
-		    ModelComputer currentComputer=null;
 		   
 		    
 		    if ( listModelComputers.isEmpty()) {
@@ -82,12 +80,6 @@ public class DaoComputer {
 		    	
 			}
 		    
-			
-		/* Exécution d'une requête de lecture */
-		
-		    for(ModelComputer model:listModelComputers) {
-	  			System.out.println(model);
-	  		}
 		return listModelComputers;
 		
 	}
@@ -177,6 +169,14 @@ public class DaoComputer {
 		int idUpdated = namedParameterJdbcTemplate.update(deleteRequest,namedParameters);
 		
 		
+	}
+	
+	public void deleteByCompanyId(int id) {
+		String requestComputer = "DELETE FROM computer WHERE company_id=:companyId ;";
+		MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+
+		namedParameters.addValue("companyId", id);
+		int idUpdated = namedParameterJdbcTemplate.update(requestComputer, namedParameters);
 	}
 	
 	
