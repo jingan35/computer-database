@@ -24,7 +24,7 @@ public class MapperComputer {
   		dC.setName(mC.getName());
   		dC.setIntroduced(String.valueOf(mC.getIntroduced()));
   		dC.setDiscontinued(String.valueOf(mC.getDiscontinued()));
-  		dC.setCompanyId(String.valueOf(mC.getCompany_id()));
+  		dC.setCompany_id(String.valueOf(mC.getCompany_id()));
   		if(mC.getCompanyName()!=null)
   			dC.setCompanyName(mC.getCompanyName());;
   		return dC;
@@ -65,9 +65,9 @@ public class MapperComputer {
   			System.out.println("nullDiscontinued");
   			mC.setDiscontinued(null);
   		}
-  		if(!dC.getCompanyId().equals("null")) {
+  		if(!dC.getCompany_id().equals("null")) {
   			try {
-  				mC.setCompany_id(Integer.valueOf(dC.getCompanyId()));
+  				mC.setCompany_id(Integer.valueOf(dC.getCompany_id()));
   			}catch(java.lang.NumberFormatException nFE) {
   				throw new NotAIntegerException();
   			}

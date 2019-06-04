@@ -16,6 +16,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.View;
 
 import com.excilys.cdb.exception.BaseVide;
 import com.excilys.cdb.exception.PasDePagesNegException;
@@ -41,8 +46,8 @@ import javax.servlet.annotation.*;
 /**
  * Servlet implementation class DashboardServlet
  */
-
-public class DashboardServlet extends HttpServlet {
+@Controller
+public class DashboardServlet {
 
 	ServiceComputer serviceComputer;
 	Page pageData = Page.getInstance();
@@ -66,15 +71,16 @@ public class DashboardServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	@GetMapping("/dashboard")
+	protected String doGet(Model model,@RequestParam(defaultValue = "") String search,@RequestParam(required=false) String page,
+			@RequestParam(required=false,name="orderBy")String orderBy0,@RequestParam(required=false)String size)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		pageData.setCurrentPage((request.getParameter("page") == null||request.getParameter("page").equals("") ) ? "1" : request.getParameter("page"));
-		pageData.setSearched(request.getParameter("search"));
+		pageData.setCurrentPage((page == null||page.equals("") ) ? "1" : page);
+		pageData.setSearched(search);
 		boolean error = false;
 
-		String orderBy = request.getParameter("orderBy");
+		String orderBy = orderBy0;
 		if (orderBy != null&&!orderBy.equals("")) {
 			switch (orderBy) {
 			case "computer":
@@ -116,15 +122,15 @@ public class DashboardServlet extends HttpServlet {
 			}
 		}
 
-		request.setAttribute("pageData.getCurrentPage()", pageData.getCurrentPage());
-		request.setAttribute("search", pageData.getSearched());
-		if (request.getParameter("size") != null)
-			pageData.setNbComputersByPage(request.getParameter("size"));
-		request.setAttribute("size", pageData.getNbComputersByPage());
+		model.addAttribute("pageData.getCurrentPage()", pageData.getCurrentPage());
+		model.addAttribute("search", pageData.getSearched());
+		if (size != null)
+			pageData.setNbComputersByPage(size);
+		model.addAttribute("size", pageData.getNbComputersByPage());
 
 		try {
 			pageData.setNbComputers((String.valueOf(serviceComputer.selectComputerCount(pageData.getSearched()))));
-			request.setAttribute("nbComputers", pageData.getNbComputers());
+			model.addAttribute("nbComputers", pageData.getNbComputers());
 			int resteDernierePage = Integer.parseInt(pageData.getNbComputers())
 					% Integer.parseInt(pageData.getNbComputersByPage());
 			int lastPage = (resteDernierePage == 0)
@@ -144,17 +150,17 @@ public class DashboardServlet extends HttpServlet {
 			
 			computersList = (pageData.getSearched() == null) ? (serviceComputer.selectComputer(pageData))
 					: (serviceComputer.selectComputerSearch(pageData));
-			request.setAttribute("computersList", computersList);
-			request.setAttribute("pagination", getPagination(Integer.parseInt(pageData.getCurrentPage()), lastPage));
-			request.setAttribute("lastPage", lastPage);
+			model.addAttribute("computersList", computersList);
+			model.addAttribute("pagination", getPagination(Integer.parseInt(pageData.getCurrentPage()), lastPage));
+			model.addAttribute("lastPage", lastPage);
 			int firstArrow = ((Integer.parseInt(pageData.getCurrentPage()) - 5) >= 1)
 					? (Integer.parseInt(pageData.getCurrentPage()) - 5)
 					: 1;
 			int secondArrow = ((Integer.parseInt(pageData.getCurrentPage()) + 5) <= lastPage)
 					? (Integer.parseInt(pageData.getCurrentPage()) + 5)
 					: lastPage;
-			request.setAttribute("firstArrow", firstArrow);
-			request.setAttribute("secondArrow", secondArrow);
+			model.addAttribute("firstArrow", firstArrow);
+			model.addAttribute("secondArrow", secondArrow);
 
 			ArrayList<Integer> availablePages = new ArrayList<Integer>();
 			if (Integer.parseInt(pageData.getCurrentPage()) == (lastPage - 1)
@@ -177,16 +183,16 @@ public class DashboardServlet extends HttpServlet {
 				}
 			}
 			pageData.setAvailablePages(availablePages);
-			request.setAttribute("availablePages", availablePages);
+			model.addAttribute("availablePages", availablePages);
 
 		} catch (BaseVide | PasDePagesNegException e) {
 			Logger logger = LoggerFactory.getLogger(DashboardServlet.class);
 			logger.error(e.getMessage(), e);
 		}
 		if(error==false)
-			this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
+			return "dashboard";
 		else
-			response.sendError(404);
+			return "404";
 	}
 
 	protected int getPagination(int currentPage, int lastPage) {
@@ -197,11 +203,20 @@ public class DashboardServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
+	
+	/*@PostMapping("/dashboard")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		serviceComputer.deleteComputer(request.getParameter("selection"));
 		doGet(request, response);
-	}
+	}*/
 
+	@PostMapping("/dashboard")
+	protected String doPost(@RequestParam(required=false) String selection)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		serviceComputer.deleteComputer(selection);
+		return "redirect:/dashboard";
+	}
 }

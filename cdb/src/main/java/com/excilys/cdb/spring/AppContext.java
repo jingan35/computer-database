@@ -2,6 +2,7 @@ package com.excilys.cdb.spring;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import com.excilys.cdb.persistance.DAOFactory;
 import com.excilys.cdb.service.MapperCompany;
 import com.excilys.cdb.service.MapperComputer;
 import com.excilys.cdb.service.ServiceCompany;
@@ -32,6 +33,10 @@ private static AppContext INSTANCE = new AppContext();
 		return INSTANCE;
 	}
 
+	public DAOFactory getDaoFactory() {
+		return ctx.getBean(DAOFactory.class);
+	}
+	
 	public ServiceCompany getServiceCompany() {
 		return ctx.getBean(ServiceCompany.class);
 	}

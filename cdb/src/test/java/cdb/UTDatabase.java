@@ -11,6 +11,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.excilys.cdb.persistance.DAOFactory;
+import com.excilys.cdb.spring.AppContext;
 import com.excilys.cdb.model.ModelCompany;
 import com.excilys.cdb.model.ModelComputer;
 
@@ -19,6 +20,7 @@ public class UTDatabase {
 	private static final String ENTRIES_SQL = "entriesUT.sql";
 	private static final String SCHEMA_SQL = "schema.sql";
 	private static UTDatabase INSTANCE = null;
+	private static AppContext appContext = AppContext.getInstance();
 
 	private Map<Integer, ModelCompany> companies = new TreeMap<>();
 	private Map<Integer, ModelComputer> computers = new TreeMap<>();
@@ -85,7 +87,8 @@ public class UTDatabase {
 	}
 
 	private static void executeScript(String filename) throws SQLException, IOException {
-		try (final Connection connection = DAOFactory.getInstance().getConnection();
+		
+		try (final Connection connection = appContext.getDaoFactory().getConnection();
 				final Statement statement = connection.createStatement();
 				final InputStream resourceAsStream = UTDatabase.class.getClassLoader().getResourceAsStream(filename);
 				final Scanner scanner = new Scanner(resourceAsStream)) {

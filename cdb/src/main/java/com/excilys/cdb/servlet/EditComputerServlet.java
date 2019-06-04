@@ -14,6 +14,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.cdb.exception.BaseVide;
 import com.excilys.cdb.exception.InvalidDateOrderException;
@@ -33,73 +40,83 @@ import com.excilys.cdb.validator.Validator;
 /**
  * Servlet implementation class EditComputer
  */
-
-public class EditComputerServlet extends HttpServlet {
+@Controller
+public class EditComputerServlet {
 	private static final long serialVersionUID = 1L;
-	ServiceComputer serviceComputer ;
-    private DtoComputer currentComputer;   
-    ServiceCompany serviceCompany ;
+	ServiceComputer serviceComputer;
+	private DtoComputer currentComputer;
+	ServiceCompany serviceCompany;
 	ArrayList<DtoCompany> companiesList = new ArrayList<DtoCompany>();
-	Validator validator ;
+	Validator validator;
 	AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
 	AppContext appContext;
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public EditComputerServlet(){
-        super();
-        this.appContext=AppContext.getInstance();
-	    this.serviceComputer = this.appContext.getServiceComputer();
-        this.serviceCompany =this.appContext.getServiceCompany();
-        this.validator= this.appContext.getValidator();
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public EditComputerServlet() {
+		super();
+		this.appContext = AppContext.getInstance();
+		this.serviceComputer = this.appContext.getServiceComputer();
+		this.serviceCompany = this.appContext.getServiceCompany();
+		this.validator = this.appContext.getValidator();
+	}
+
+
+	@GetMapping("/editComputer")
+	protected ModelAndView doGet(@RequestParam(name = "id") String id1) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		int id = Integer.parseInt(request.getParameter("id"));
-		request.setAttribute("id", id);
+		int id = Integer.parseInt(id1);
+		
+		ModelAndView modelAndView= new ModelAndView("editComputer", "dtoComputer", new DtoComputer());
+		
+		
 		try {
-			currentComputer=serviceComputer.computerDetails(id);
-			String name=currentComputer.getName();
-			String introduced=currentComputer.getIntroduced()==null?null:currentComputer.getIntroduced().split(" ")[0];
-			String discontinued=currentComputer.getDiscontinued()==null?null:currentComputer.getDiscontinued().split(" ")[0];
-			String companyName=currentComputer.getCompanyName()==null?null:currentComputer.getCompanyName();
-			String companyId=currentComputer.getCompanyId()==null?null:currentComputer.getCompanyId();
-			request.setAttribute("name", name);
-			request.setAttribute("introduced", introduced);
-			request.setAttribute("discontinued", discontinued);
-			request.setAttribute("company_name", companyName);
-			request.setAttribute("companyId", companyId);
-			companiesList=serviceCompany.selectAllCompanies();
-			request.setAttribute("companiesList", companiesList);
+			currentComputer = serviceComputer.computerDetails(id);
+			String name = currentComputer.getName();
+			String introduced = currentComputer.getIntroduced() == null ? null
+					: currentComputer.getIntroduced().split(" ")[0];
+			String discontinued = currentComputer.getDiscontinued() == null ? null
+					: currentComputer.getDiscontinued().split(" ")[0];
+			String companyName = currentComputer.getCompanyName() == null ? null : currentComputer.getCompanyName();
+			String companyId = currentComputer.getCompany_id() == null ? null : currentComputer.getCompany_id();
 			
+			companiesList = serviceCompany.selectAllCompanies();
+			
+			DtoComputer dtoComputer=new DtoComputer(id1,name,introduced,discontinued,companyId);
+			dtoComputer.setCompanyName(companyName);
+			modelAndView= new ModelAndView("editComputer", "dtoComputer", dtoComputer);
+			modelAndView.addObject("company_id", companyId);
+			modelAndView.addObject("companyName", companyName==null?"":companyName);
+			modelAndView.addObject("companiesList", companiesList);
+			
+			return modelAndView;
 		} catch (RequeteSansResultatException | BaseVide e) {
 			// TODO Auto-generated catch block
 			Logger logger = LoggerFactory.getLogger(DashboardServlet.class);
 			logger.error(e.getMessage(), e);
 		}
-		this.getServletContext().getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward( request, response );
+		modelAndView.addObject("id", id);
+		return modelAndView;
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		DtoComputer dtoComputer= new DtoComputer(request.getParameter("id"),request.getParameter("UpdateComputerName"),request.getParameter("UpdateIntroduced"),request.getParameter("UpdateDiscontinued"),
-				request.getParameter("UpdateCompanyId"));
+	@PostMapping("/editComputer")
+	protected String doPost(@Validated @ModelAttribute("dtoComputer")DtoComputer dtoComputer) throws ServletException, IOException {
 		try {
 			validator.validateComputerDto(dtoComputer);
 			serviceComputer.updateComputer(dtoComputer);
-		} catch (PasLeBonFormatTimestamp | NotAIntegerException | TimestampDiscotinuedInferiorToTimestampIntroduced | RequiredElementException | InvalidDateOrderException e) {
+		} catch (PasLeBonFormatTimestamp | NotAIntegerException | TimestampDiscotinuedInferiorToTimestampIntroduced
+				| RequiredElementException | InvalidDateOrderException e) {
 			// TODO Auto-generated catch block
 			Logger logger = LoggerFactory.getLogger(DashboardServlet.class);
 			logger.error(e.getMessage(), e);
 		}
-		//doGet(request, response);
-		response.sendRedirect(request.getContextPath()+"/dashboard");	}
+		// doGet(request, response);
+		return "redirect:/dashboard";
+	}
 
 }

@@ -13,6 +13,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.cdb.exception.BaseVide;
 import com.excilys.cdb.exception.InvalidDateOrderException;
@@ -32,8 +40,8 @@ import com.excilys.cdb.validator.Validator;;
 /**
  * Servlet implementation class AddComputerServlet
  */
-
-public class AddComputerServlet extends HttpServlet {
+@Controller
+public class AddComputerServlet {
 	
 	ServiceCompany serviceCompany;
 	ArrayList<DtoCompany> companiesList = new ArrayList<DtoCompany>();
@@ -48,6 +56,7 @@ public class AddComputerServlet extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
+	
     public AddComputerServlet() {
         super();
         this.appContext=AppContext.getInstance();
@@ -55,10 +64,16 @@ public class AddComputerServlet extends HttpServlet {
         this.serviceCompany =this.appContext.getServiceCompany();
         this.validator= this.appContext.getValidator();
     }
-
+    
+    @GetMapping("/addComputer")
+    public ModelAndView showForm() {
+        return new ModelAndView("addComputer", "dtoComputer", new DtoComputer());
+    }
+    
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
+   /* @GetMapping("/addComputer")
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		try {
@@ -71,16 +86,17 @@ public class AddComputerServlet extends HttpServlet {
 			logger.error(e.getMessage(), e);
 		}
 		this.getServletContext().getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward( request, response );
-	}
+	}*/
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    /*@PostMapping("/addComputer")
+	protected void doPost(HttpServletRequest request, HttpServletResponse response,@RequestBody DtoComputer dtoComputer) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		DtoComputer dtoComputer= new DtoComputer("0",request.getParameter("computerName"),request.getParameter("introduced"),request.getParameter("discontinued"),
-				request.getParameter("companyId"));
-		System.out.println(request.getParameter("introduced"));
+		/*DtoComputer dtoComputer= new DtoComputer("0",request.getParameter("computerName"),request.getParameter("introduced"),request.getParameter("discontinued"),
+				request.getParameter("companyId"));*/
+		/*System.out.println(request.getParameter("introduced"));
 		try {
 			validator.validateComputerDto(dtoComputer);
 			serviceComputer.insertComputer(dtoComputer);
@@ -92,6 +108,25 @@ public class AddComputerServlet extends HttpServlet {
 		}
 		
 		doGet(request, response);
+	}*/
+    
+    @PostMapping("/addComputer")
+	protected String doPost(@Validated @ModelAttribute("dtoComputer")DtoComputer dtoComputer) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		/*DtoComputer dtoComputer= new DtoComputer("0",request.getParameter("computerName"),request.getParameter("introduced"),request.getParameter("discontinued"),
+				request.getParameter("companyId"));
+		System.out.println(request.getParameter("introduced"));*/
+		try {
+			validator.validateComputerDto(dtoComputer);
+			serviceComputer.insertComputer(dtoComputer);
+			
+		} catch (NotAIntegerException | RequiredElementException | PasLeBonFormatTimestamp | TimestampDiscotinuedInferiorToTimestampIntroduced | InvalidDateOrderException e) {
+			// TODO Auto-generated catch block
+			Logger logger = LoggerFactory.getLogger(AddComputerServlet.class);
+			logger.error(e.getMessage(), e);
+		}
+		
+		return "redirect:/addComputer";
 	}
 
 }

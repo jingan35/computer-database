@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -35,7 +36,7 @@ public class DaoComputerTest {
 	@Test
 	public void selectTest() throws BaseVide {
 
-		ArrayList<ModelComputer> listResultatObtenu;
+		List<ModelComputer> listResultatObtenu;
 		
 		listResultatObtenu = daoComp.select(page);
 		int tailleObtenu = listResultatObtenu.size();

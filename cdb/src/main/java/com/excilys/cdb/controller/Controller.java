@@ -118,7 +118,7 @@ public class Controller {
     					dtoToAdd.setDiscontinued(cmdTab[4]);
     				}
     				if(!cmdTab[5].equals("n")) {
-    					dtoToAdd.setCompanyId(cmdTab[5]);
+    					dtoToAdd.setCompany_id(cmdTab[5]);
     				}
     				
     				insertComputer(dtoToAdd);
@@ -145,7 +145,7 @@ public class Controller {
     					dtoToUpdate.setDiscontinued(cmdTab[4]);
     				}
     				if(!cmdTab[5].equals("n")) {
-    					dtoToUpdate.setCompanyId(cmdTab[5]);
+    					dtoToUpdate.setCompany_id(cmdTab[5]);
     				}
     				
 	    			//fonction pour update d'un computer

@@ -9,8 +9,8 @@ public class DtoComputer {
 	private String companyName= null;
 	
 	public DtoComputer(){
-		id="-1";
-		name="noName";
+		id="0";
+		name="";
 		introduced=null;
 		discontinued=null;
 		company_id="-1";
@@ -18,6 +18,14 @@ public class DtoComputer {
 	
 	public DtoComputer(String id, String name,String introduced, String discontinued,String company_id){
 		this.id= id;
+		this.name=name;
+		this.introduced=introduced.equals("")?null:introduced;
+		this.discontinued=discontinued.equals("")?null:discontinued;
+		this.company_id=company_id.equals("")?null:company_id;
+	}
+	
+	public DtoComputer(String name,String introduced, String discontinued,String company_id){
+		this.id= "0";
 		this.name=name;
 		this.introduced=introduced.equals("")?null:introduced;
 		this.discontinued=discontinued.equals("")?null:discontinued;
@@ -59,7 +67,7 @@ public class DtoComputer {
 		return discontinued;
 	}
 	
-	public String getCompanyId() {
+	public String getCompany_id() {
 		// TODO Auto-generated method stub
 		return company_id;
 	}
@@ -89,7 +97,7 @@ public class DtoComputer {
 		discontinued=T;
 	}
 
-	public void setCompanyId(String newCompanyId) {
+	public void setCompany_id(String newCompanyId) {
 		// TODO Auto-generated method stub
 		company_id=newCompanyId;
 	}

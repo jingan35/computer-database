@@ -28,9 +28,11 @@ public class Validator {
 		if (!id.equals("null")) {
 			try {
 				int localId = Integer.parseInt(id);
-				if (localId < 0)
-					throw new Exception();
-			} catch (Exception e) {
+				if (localId < 0) {
+					System.out.println("neg");
+					throw new NumberFormatException();
+					}
+			} catch (NumberFormatException e) {
 				throw new NotAIntegerException();
 			}
 		}
@@ -81,7 +83,7 @@ public class Validator {
 			this.validateDate(computerDto.getDiscontinued());
 			this.validateDateOrder(computerDto.getIntroduced(), computerDto.getDiscontinued());
 		}
-		this.validateId(computerDto.getCompanyId());
+		this.validateId(computerDto.getCompany_id());
 	}
 
 	public void validatePagination(String paginationValue) throws NotAIntegerException, PageNumberLessThan1Exception {
