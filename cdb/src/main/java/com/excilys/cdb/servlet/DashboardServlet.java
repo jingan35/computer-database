@@ -199,19 +199,6 @@ public class DashboardServlet {
 		return Math.max(3, Math.min(lastPage - 2, currentPage));
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	
-	/*@PostMapping("/dashboard")
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		serviceComputer.deleteComputer(request.getParameter("selection"));
-		doGet(request, response);
-	}*/
-
 	@PostMapping("/dashboard")
 	protected String doPost(@RequestParam(required=false) String selection)
 			throws ServletException, IOException {

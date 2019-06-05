@@ -1,11 +1,15 @@
 package com.excilys.cdb.mapper;
 
+import javax.validation.constraints.NotEmpty;
+
 public class DtoCompany {
+	@NotEmpty
 	private String id;
+	@NotEmpty
 	private String name;
 	
 	public DtoCompany(){
-		this.id="-1";
+		this.id="0";
 		this.name=null;
 	}
 	

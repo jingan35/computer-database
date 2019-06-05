@@ -44,7 +44,6 @@ import com.excilys.cdb.validator.Validator;;
 public class AddComputerServlet {
 	
 	ServiceCompany serviceCompany;
-	ArrayList<DtoCompany> companiesList = new ArrayList<DtoCompany>();
 	Validator validator ;
 	ServiceComputer serviceComputer ;
 	AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
@@ -67,48 +66,21 @@ public class AddComputerServlet {
     
     @GetMapping("/addComputer")
     public ModelAndView showForm() {
-        return new ModelAndView("addComputer", "dtoComputer", new DtoComputer());
+    	ArrayList<DtoCompany> companiesList = new ArrayList<DtoCompany>();
+    	try {
+			companiesList = serviceCompany.selectAllCompanies();
+			System.out.println("size"+companiesList.size());
+		} catch (BaseVide e) {
+			Logger logger = LoggerFactory.getLogger(DashboardServlet.class);
+			logger.error(e.getMessage(), e);
+		}
+    	
+    	ModelAndView modelAndView= new ModelAndView("addComputer", "dtoComputer", new DtoComputer());
+    	modelAndView.addObject("companiesList", companiesList);
+    	return modelAndView;
     }
     
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-   /* @GetMapping("/addComputer")
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		try {
-			companiesList=serviceCompany.selectAllCompanies();
-			request.setAttribute("companiesList", companiesList);
-			
-		} catch (BaseVide e) {
-			// TODO Auto-generated catch block
-			Logger logger = LoggerFactory.getLogger(AddComputerServlet.class);
-			logger.error(e.getMessage(), e);
-		}
-		this.getServletContext().getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward( request, response );
-	}*/
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-    /*@PostMapping("/addComputer")
-	protected void doPost(HttpServletRequest request, HttpServletResponse response,@RequestBody DtoComputer dtoComputer) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		/*DtoComputer dtoComputer= new DtoComputer("0",request.getParameter("computerName"),request.getParameter("introduced"),request.getParameter("discontinued"),
-				request.getParameter("companyId"));*/
-		/*System.out.println(request.getParameter("introduced"));
-		try {
-			validator.validateComputerDto(dtoComputer);
-			serviceComputer.insertComputer(dtoComputer);
-			
-		} catch (NotAIntegerException | RequiredElementException | PasLeBonFormatTimestamp | TimestampDiscotinuedInferiorToTimestampIntroduced | InvalidDateOrderException e) {
-			// TODO Auto-generated catch block
-			Logger logger = LoggerFactory.getLogger(AddComputerServlet.class);
-			logger.error(e.getMessage(), e);
-		}
-		
-		doGet(request, response);
-	}*/
     
     @PostMapping("/addComputer")
 	protected String doPost(@Validated @ModelAttribute("dtoComputer")DtoComputer dtoComputer) throws ServletException, IOException {

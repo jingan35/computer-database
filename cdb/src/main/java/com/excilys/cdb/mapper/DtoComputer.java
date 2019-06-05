@@ -1,9 +1,13 @@
 package com.excilys.cdb.mapper;
+import javax.validation.constraints.*;
 
 public class DtoComputer {
 	private String id;
+	@NotEmpty 
 	private String name;
+	@Size (min=19, max=19, message="taille 19 pour les timeStamp")
 	private String introduced;
+	@Size (min=19, max=19 ,message="taille 19 pour les timeStamp")
 	private String discontinued;
 	private String company_id;
 	private String companyName= null;
