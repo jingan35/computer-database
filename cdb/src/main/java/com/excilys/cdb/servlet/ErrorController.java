@@ -47,4 +47,9 @@ public class ErrorController {
     public void throwRuntimeException() {
         throw new NullPointerException("Throwing a null pointer exception");
     }
+    
+    @GetMapping("/international")
+    public String getInternationalPage() {
+        return "international";
+    }
 }
